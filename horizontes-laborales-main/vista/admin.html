@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Horizontes San Miguel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/estilo/style.css">
+    <style>
+        html, body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: flex-start !important;
+            background: linear-gradient(135deg, #2c3e50, #3498db) !important;
+            min-height: 100vh;
+            padding-top: 60px;
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+        }
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-box h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #219a52;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        .btn-warning:hover {
+            background-color: #d68910;
+        }
+        .admin-container {
+            display: none;
+            width: 100%;
+            background: white;
+            min-height: 100vh;
+        }
+        .admin-header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 20px 30px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .admin-tab {
+            padding: 10px 20px;
+            border: none;
+            background: #f8f9fa;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .admin-tab.active {
+            background: #3498db;
+            color: white;
+        }
+        .admin-content {
+            padding: 30px;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .data-table th, .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .data-table th {
+            background: #2c3e50;
+            color: white;
+            font-weight: 600;
+        }
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-header h3 {
+            color: #2c3e50;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .checkbox-item label {
+            font-size: 0.9rem;
+        }
+        .search-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .search-bar input, .search-bar select {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .search-bar input {
+            flex: 1;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        .stat-info h3 {
+            margin: 0;
+            font-size: 2rem;
+            color: #2c3e50;
+        }
+        .stat-info p {
+            margin: 0;
+            color: #666;
+        }
+        .data-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .data-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        .chart-bar {
+            margin-bottom: 10px;
+        }
+        .chart-bar label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .chart-bar .bar-bg {
+            background: #e9ecef;
+            border-radius: 4px;
+            height: 20px;
+        }
+        .chart-bar .bar-fill {
+            background: #3498db;
+            border-radius: 4px;
+            height: 100%;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login -->
+    <div id="login-view" class="login-container">
+        <div class="login-box">
+            <h2><i class="fas fa-user-shield"></i> Admin Horizontes</h2>
+            <div id="login-error" class="alert alert-error" style="display: none;"></div>
+            <form id="login-form" method="POST">
+                <div class="form-group">
+                    <label for="usuario">Usuario</label>
+                    <input type="text" id="usuario" required>
+                </div>
+                <div class="form-group">
+                    <label for="contraseña">Contraseña</label>
+                    <input type="password" id="contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Panel Admin -->
+    <div id="admin-view" class="admin-container">
+        <div class="admin-header">
+            <h1><i class="fas fa-cogs"></i> Panel de Administración</h1>
+            <div>
+                <span id="admin-user"></span>
+                <button class="btn btn-warning" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+        
+        <div class="admin-tabs">
+            <button class="admin-tab active" data-tab="dashboard">Dashboard</button>
+            <button class="admin-tab" data-tab="instituciones">Instituciones</button>
+            <button class="admin-tab" data-tab="carreras">Carreras</button>
+            <button class="admin-tab" data-tab="usuarios">Usuarios</button>
+            <button class="admin-tab" data-tab="solicitudes">Solicitudes</button>
+            <button class="admin-tab" data-tab="solicitudes-carreras">Solicitudes Carreras <span id="badge-carreras" class="badge badge-warning" style="display:none;">0</span></button>
+            <button class="admin-tab" data-tab="historial">Historial</button>
+        </div>
+        
+        <div class="admin-content">
+            <!-- Tab Dashboard -->
+            <div id="tab-dashboard" class="tab-content">
+                <h2 style="margin-bottom: 20px;"><i class="fas fa-chart-line"></i> Estadísticas</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #3498db;"><i class="fas fa-school"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-instituciones">0</h3>
+                            <p>Instituciones</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #27ae60;"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-carreras">0</h3>
+                            <p>Carreras</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e74c3c;"><i class="fas fa-users"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-usuarios">0</h3>
+                            <p>Usuarios</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #f39c12;"><i class="fas fa-clock"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-solicitudes-pendientes">0</h3>
+                            <p>SOLICITUDES PENDIENTES</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="data-card">
+                        <h3><i class="fas fa-building"></i> Instituciones por Tipo</h3>
+                        <div id="chart-tipos"></div>
+                    </div>
+                    <div class="data-card">
+                        <h3><i class="fas fa-layer-group"></i> Carreras por Nivel</h3>
+                        <div id="chart-niveles"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Instituciones -->
+            <div id="tab-instituciones" class="tab-content">
+                <div class="search-bar">
+                    <input type="text" id="search-instituciones" placeholder="Buscar instituciones...">
+                    <select id="filter-tipo-institucion">
+                        <option value="">Todos los tipos</option>
+                    </select>
+                    <button class="btn btn-success" onclick="openModal('institucion')">
+                        <i class="fas fa-plus"></i> Nueva Institución
+                    </button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>CUE</th>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-instituciones"></tbody>
+                </table>
+            </div>
+
+            <!-- Tab Carreras -->
+            <div id="tab-carreras" class="tab-content" style="display: none;">
+                <div class="search-bar">
+                    <input type="text" id="search-carreras" placeholder="Buscar carreras...">
+                    <select id="filter-nivel-carrera">
+                        <option value="">Todos los niveles</option>
+                    </select>
+                    <button class="btn btn-success" onclick="openModal('carrera')">
+                        <i class="fas fa-plus"></i> Nueva Carrera
+                    </button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Nivel</th>
+                            <th>Duración</th>
+                            <th>Instituciones</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-carreras"></tbody>
+                </table>
+            </div>
+
+            <!-- Tab Usuarios -->
+            <div id="tab-usuarios" class="tab-content" style="display: none;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Institución</th>
+                            <th>Último Login</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-usuarios"></tbody>
+                </table>
+            </div>
+
+            <!-- Tab Solicitudes -->
+            <div id="tab-solicitudes" class="tab-content" style="display: none;">
+                <div class="search-bar">
+                    <select id="filter-estado-solicitud">
+                        <option value="">Todos los estados</option>
+                        <option value="pendiente">Pendientes</option>
+                        <option value="aprobado">Aprobadas</option>
+                        <option value="rechazado">Rechazadas</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="loadSolicitudes()">
+                        <i class="fas fa-sync"></i> Actualizar
+                    </button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>CUE</th>
+                            <th>Institución</th>
+                            <th>Email</th>
+                            <th>Nombre Contacto</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-solicitudes"></tbody>
+                </table>
+            </div>
+
+            <!-- Tab Solicitudes Carreras -->
+            <div id="tab-solicitudes-carreras" class="tab-content" style="display: none;">
+                <div class="search-bar">
+                    <select id="filter-estado-carreras">
+                        <option value="">Todos los estados</option>
+                        <option value="pendiente">Pendientes</option>
+                        <option value="aprobado">Aprobadas</option>
+                        <option value="rechazado">Rechazadas</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="loadSolicitudesCarreras()">
+                        <i class="fas fa-sync"></i> Actualizar
+                    </button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Institución</th>
+                            <th>Carrera</th>
+                            <th>Nivel</th>
+                            <th>Turno</th>
+                            <th>Modalidad</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-solicitudes-carreras"></tbody>
+                </table>
+            </div>
+
+            <!-- Tab Historial -->
+            <div id="tab-historial" class="tab-content" style="display: none;">
+                <div class="search-bar">
+                    <button class="btn btn-primary" onclick="loadHistorial()">
+                        <i class="fas fa-sync"></i> Actualizar
+                    </button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                            <th>Acción</th>
+                            <th>Entidad</th>
+                            <th>Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-historial"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Institución -->
+    <div id="modal-institucion" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-institucion-title">Nueva Institución</h3>
+                <button class="close-modal" onclick="closeModal('institucion')">&times;</button>
+            </div>
+            <form id="form-institucion">
+                <input type="hidden" id="institucion-cue-edit">
+                <div class="form-group">
+                    <label for="institucion-cue">CUE *</label>
+                    <input type="text" id="institucion-cue" required>
+                </div>
+                <div class="form-group">
+                    <label for="institucion-nombre">Nombre *</label>
+                    <input type="text" id="institucion-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="institucion-tipo">Tipo</label>
+                    <select id="institucion-tipo"></select>
+                </div>
+                <div class="form-group">
+                    <label for="institucion-direccion">Dirección</label>
+                    <input type="text" id="institucion-direccion">
+                </div>
+                <div class="form-group">
+                    <label for="institucion-telefono">Teléfono</label>
+                    <input type="text" id="institucion-telefono">
+                </div>
+                <div class="form-group">
+                    <label for="institucion-email">Email</label>
+                    <input type="email" id="institucion-email">
+                </div>
+                <div class="form-group">
+                    <label for="institucion-turno">Turno</label>
+                    <input type="text" id="institucion-turno">
+                </div>
+                <div class="form-group">
+                    <label for="institucion-web">Sitio Web</label>
+                    <input type="text" id="institucion-web">
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Carrera -->
+    <div id="modal-carrera" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-carrera-title">Nueva Carrera</h3>
+                <button class="close-modal" onclick="closeModal('carrera')">&times;</button>
+            </div>
+            <form id="form-carrera">
+                <input type="hidden" id="carrera-id-edit">
+                <div class="form-group">
+                    <label for="carrera-nombre">Nombre *</label>
+                    <input type="text" id="carrera-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="carrera-nivel">Nivel *</label>
+                    <select id="carrera-nivel" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="carrera-duracion">Duración</label>
+                    <input type="text" id="carrera-duracion">
+                </div>
+                <div class="form-group">
+                    <label for="carrera-descripcion">Descripción</label>
+                    <textarea id="carrera-descripcion" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="carrera-perfil">Perfil del Egresado</label>
+                    <textarea id="carrera-perfil" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Competencias</label>
+                    <div class="checkbox-group" id="carrera-competencias"></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        let isLoggedIn = false;
+
+        // Ocultar panel al inicio
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('admin-view').style.display = 'none';
+        });
+
+        // Login
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+            const password = document.getElementById('contraseña').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    isLoggedIn = true;
+                    showAdmin();
+                } else {
+                    document.getElementById('login-error').textContent = 'Usuario o contraseña incorrectos';
+                    document.getElementById('login-error').style.display = 'block';
+                }
+            } catch (error) {
+                document.getElementById('login-error').textContent = 'Error de conexión';
+                document.getElementById('login-error').style.display = 'block';
+            }
+        });
+
+        function showAdmin() {
+            document.getElementById('login-view').style.display = 'none';
+            document.getElementById('admin-view').style.display = 'block';
+            document.body.style.background = 'white';
+            const user = JSON.parse(localStorage.getItem('user'));
+            document.getElementById('admin-user').textContent = `Bienvenido, ${user.nombre}`;
+            loadData();
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            isLoggedIn = false;
+            document.getElementById('login-view').style.display = 'flex';
+            document.getElementById('admin-view').style.display = 'none';
+            document.body.style.background = '';
+        }
+
+        // Tabs
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+                this.classList.add('active');
+                const tabId = `tab-${this.dataset.tab}`;
+                document.getElementById(tabId).style.display = 'block';
+                
+                if (this.dataset.tab === 'dashboard') loadDashboard();
+                else if (this.dataset.tab === 'solicitudes-carreras') loadSolicitudesCarreras();
+                else if (this.dataset.tab === 'historial') loadHistorial();
+            });
+        });
+
+        async function loadData() {
+            await Promise.all([
+                loadDashboard(),
+                loadTiposInstitucion(),
+                loadNiveles(),
+                loadCompetencias(),
+                loadInstituciones(),
+                loadCarreras(),
+                loadUsuarios(),
+                loadSolicitudes(),
+                loadSolicitudesCarreras(),
+                loadHistorial()
+            ]);
+        }
+
+        async function loadTiposInstitucion() {
+            const response = await fetch(`${API_URL}/tipos-institucion`);
+            const tipos = await response.json();
+            
+            const select = document.getElementById('institucion-tipo');
+            const filter = document.getElementById('filter-tipo-institucion');
+            
+            select.innerHTML = tipos.map(t => `<option value="${t.id}">${t.nombre}</option>`).join('');
+            filter.innerHTML = '<option value="">Todos los tipos</option>' + 
+                tipos.map(t => `<option value="${t.id}">${t.nombre}</option>`).join('');
+        }
+
+        async function loadNiveles() {
+            const response = await fetch(`${API_URL}/niveles`);
+            const niveles = await response.json();
+            
+            const select = document.getElementById('carrera-nivel');
+            const filter = document.getElementById('filter-nivel-carrera');
+            
+            select.innerHTML = niveles.map(n => `<option value="${n.id}">${n.nombre}</option>`).join('');
+            filter.innerHTML = '<option value="">Todos los niveles</option>' + 
+                niveles.map(n => `<option value="${n.id}">${n.nombre}</option>`).join('');
+        }
+
+        async function loadCompetencias() {
+            const response = await fetch(`${API_URL}/competencias`);
+            const competencias = await response.json();
+            
+            document.getElementById('carrera-competencias').innerHTML = 
+                competencias.map(c => `
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="comp-${c.id}" value="${c.id}">
+                        <label for="comp-${c.id}">${c.nombre}</label>
+                    </div>
+                `).join('');
+        }
+
+        async function loadInstituciones() {
+            const response = await fetch(`${API_URL}/instituciones`);
+            const instituciones = await response.json();
+            
+            document.getElementById('tabla-instituciones').innerHTML = instituciones.map(i => `
+                <tr>
+                    <td>${i.cue}</td>
+                    <td>${i.nombre}</td>
+                    <td>${i.tipo_nombre || ''}</td>
+                    <td>${i.direccion || ''}</td>
+                    <td>${i.telefono || ''}</td>
+                    <td>
+                        <button class="btn btn-warning" onclick="editInstitucion('${i.cue}')">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteInstitucion('${i.cue}')">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function loadCarreras() {
+            const response = await fetch(`${API_URL}/carreras`);
+            const carreras = await response.json();
+            
+            document.getElementById('tabla-carreras').innerHTML = carreras.map(c => `
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.nombre}</td>
+                    <td>${c.nivel_nombre || ''}</td>
+                    <td>${c.duracion || ''}</td>
+                    <td>-</td>
+                    <td>
+                        <button class="btn btn-warning" onclick="editCarrera(${c.id})">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteCarrera(${c.id})">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function loadUsuarios() {
+            const response = await fetch(`${API_URL}/usuarios`);
+            const usuarios = await response.json();
+            
+            document.getElementById('tabla-usuarios').innerHTML = usuarios.map(u => `
+                <tr>
+                    <td>${u.id}</td>
+                    <td>${u.usuario}</td>
+                    <td>${u.nombre || ''}</td>
+                    <td>${u.email}</td>
+                    <td>${u.rol === 'admin' ? 'Administrador' : 'Institución'}</td>
+                    <td>${u.institucion_cue || '-'}</td>
+                    <td>${u.ultimo_login ? new Date(u.ultimo_login).toLocaleDateString() : '-'}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteUsuario(${u.id})">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Modal functions
+        function openModal(type) {
+            document.getElementById(`modal-${type}`).style.display = 'flex';
+        }
+
+        function closeModal(type) {
+            document.getElementById(`modal-${type}`).style.display = 'none';
+        }
+
+        // Instituciones
+        document.getElementById('form-institucion').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const cue = document.getElementById('institucion-cue-edit').value;
+            const data = {
+                cue: document.getElementById('institucion-cue').value,
+                nombre: document.getElementById('institucion-nombre').value,
+                tipo_id: parseInt(document.getElementById('institucion-tipo').value),
+                direccion: document.getElementById('institucion-direccion').value,
+                telefono: document.getElementById('institucion-telefono').value,
+                email: document.getElementById('institucion-email').value,
+                turno: document.getElementById('institucion-turno').value,
+                sitio_web: document.getElementById('institucion-web').value
+            };
+            
+            const method = cue ? 'PUT' : 'POST';
+            const url = cue ? `${API_URL}/instituciones/${cue}` : `${API_URL}/instituciones`;
+            
+            await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            closeModal('institucion');
+            loadInstituciones();
+        });
+
+        async function editInstitucion(cue) {
+            const response = await fetch(`${API_URL}/instituciones/${cue}`);
+            const inst = await response.json();
+            
+            document.getElementById('institucion-cue-edit').value = inst.cue;
+            document.getElementById('institucion-cue').value = inst.cue;
+            document.getElementById('institucion-nombre').value = inst.nombre;
+            document.getElementById('institucion-tipo').value = inst.tipo_id;
+            document.getElementById('institucion-direccion').value = inst.direccion || '';
+            document.getElementById('institucion-telefono').value = inst.telefono || '';
+            document.getElementById('institucion-email').value = inst.email || '';
+            document.getElementById('institucion-turno').value = inst.turno || '';
+            document.getElementById('institucion-web').value = inst.sitio_web || '';
+            
+            openModal('institucion');
+        }
+
+        async function deleteInstitucion(cue) {
+            if (confirm('¿Estás seguro de eliminar esta institución?')) {
+                await fetch(`${API_URL}/instituciones/${cue}`, { method: 'DELETE' });
+                loadInstituciones();
+            }
+        }
+
+        // Carreras
+        document.getElementById('form-carrera').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('carrera-id-edit').value;
+            
+            const competencias = Array.from(document.querySelectorAll('#carrera-competencias input:checked'))
+                .map(c => parseInt(c.value));
+            
+            const data = {
+                nombre: document.getElementById('carrera-nombre').value,
+                nivel_id: parseInt(document.getElementById('carrera-nivel').value),
+                duracion: document.getElementById('carrera-duracion').value,
+                descripcion: document.getElementById('carrera-descripcion').value,
+                perfil_egresado: document.getElementById('carrera-perfil').value,
+                competencias
+            };
+            
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/carreras/${id}` : `${API_URL}/carreras`;
+            
+            await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            closeModal('carrera');
+            loadCarreras();
+        });
+
+        async function editCarrera(id) {
+            const response = await fetch(`${API_URL}/carreras/${id}`);
+            const carrera = await response.json();
+            
+            document.getElementById('carrera-id-edit').value = carrera.id;
+            document.getElementById('carrera-nombre').value = carrera.nombre;
+            document.getElementById('carrera-nivel').value = carrera.nivel_id;
+            document.getElementById('carrera-duracion').value = carrera.duracion || '';
+            document.getElementById('carrera-descripcion').value = carrera.descripcion || '';
+            document.getElementById('carrera-perfil').value = carrera.perfil_egresado || '';
+            
+            if (carrera.competencias) {
+                carrera.competencias.forEach(c => {
+                    const checkbox = document.getElementById(`comp-${c.id}`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+            
+            openModal('carrera');
+        }
+
+        async function deleteCarrera(id) {
+            if (confirm('¿Estás seguro de eliminar esta carrera?')) {
+                await fetch(`${API_URL}/carreras/${id}`, { method: 'DELETE' });
+                loadCarreras();
+            }
+        }
+
+        // Solicitudes
+        async function loadSolicitudes() {
+            const response = await fetch(`${API_URL}/solicitudes`);
+            const solicitudes = await response.json();
+            
+            const filter = document.getElementById('filter-estado-solicitud').value;
+            let filtered = solicitudes;
+            if (filter) {
+                filtered = solicitudes.filter(s => s.estado === filter);
+            }
+            
+            document.getElementById('tabla-solicitudes').innerHTML = filtered.map(s => {
+                let acciones = '';
+                if (s.estado === 'pendiente') {
+                    acciones = `
+                        <button class="btn btn-success" onclick="aprobarSolicitud(${s.id})">
+                            <i class="fas fa-check"></i> Aprobar
+                        </button>
+                        <button class="btn btn-danger" onclick="rechazarSolicitud(${s.id})">
+                            <i class="fas fa-times"></i> Rechazar
+                        </button>
+                    `;
+                } else if (s.estado === 'rechazado') {
+                    acciones = `<button class="btn btn-danger" onclick="eliminarSolicitud(${s.id})">Eliminar</button>`;
+                } else {
+                    acciones = '<span class="badge badge-success">Aprobado</span>';
+                }
+                
+                let badge = '';
+                if (s.estado === 'pendiente') badge = '<span class="badge badge-warning">Pendiente</span>';
+                else if (s.estado === 'aprobado') badge = '<span class="badge badge-success">Aprobado</span>';
+                else badge = '<span class="badge badge-danger">Rechazado</span>';
+                
+                return `
+                    <tr>
+                        <td>${s.institucion_cue}</td>
+                        <td>${s.institucion_nombre || ''}</td>
+                        <td>${s.email}</td>
+                        <td>${s.nombre_contacto || ''}</td>
+                        <td>${badge}</td>
+                        <td>${new Date(s.created_at).toLocaleDateString()}</td>
+                        <td>${acciones}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function aprobarSolicitud(id) {
+            if (confirm('¿Aprobar esta solicitud? Se creará un usuario para la institución.')) {
+                await fetch(`${API_URL}/solicitudes/${id}/aprobar`, { method: 'PUT' });
+                loadSolicitudes();
+                loadUsuarios();
+            }
+        }
+
+        async function rechazarSolicitud(id) {
+            const motivo = prompt('Ingrese el motivo del rechazo (opcional):');
+            await fetch(`${API_URL}/solicitudes/${id}/rechazar`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ motivo_rechazo: motivo || '' })
+            });
+            loadSolicitudes();
+        }
+
+        async function eliminarSolicitud(id) {
+            if (confirm('¿Eliminar esta solicitud?')) {
+                await fetch(`${API_URL}/solicitudes/${id}`, { method: 'DELETE' });
+                loadSolicitudes();
+            }
+        }
+
+        // Filtro de solicitudes
+        document.getElementById('filter-estado-solicitud').addEventListener('change', loadSolicitudes);
+
+        // Dashboard
+        async function loadDashboard() {
+            const response = await fetch(`${API_URL}/dashboard`);
+            const data = await response.json();
+            
+            document.getElementById('stat-instituciones').textContent = data.total_instituciones;
+            document.getElementById('stat-carreras').textContent = data.total_carreras;
+            document.getElementById('stat-usuarios').textContent = data.total_usuarios;
+            const totalPendientes = data.solicitudes_pendientes + data.solicitudes_carreras_pendientes;
+            document.getElementById('stat-solicitudes-pendientes').textContent = totalPendientes;
+            
+            if (totalPendientes > 0) {
+                document.getElementById('badge-carreras').style.display = 'inline';
+                document.getElementById('badge-carreras').textContent = totalPendientes;
+            } else {
+                document.getElementById('badge-carreras').style.display = 'none';
+            }
+            
+            const maxTipo = Math.max(...data.instituciones_por_tipo.map(t => t.cantidad), 1);
+            document.getElementById('chart-tipos').innerHTML = data.instituciones_por_tipo.map(t => `
+                <div class="chart-bar">
+                    <label>
+                        <span>${t.nombre}</span>
+                        <span>${t.cantidad}</span>
+                    </label>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width: ${(t.cantidad / maxTipo) * 100}%"></div>
+                    </div>
+                </div>
+            `).join('');
+            
+            const maxNivel = Math.max(...data.carreras_por_nivel.map(n => n.cantidad), 1);
+            document.getElementById('chart-niveles').innerHTML = data.carreras_por_nivel.map(n => `
+                <div class="chart-bar">
+                    <label>
+                        <span>${n.nombre}</span>
+                        <span>${n.cantidad}</span>
+                    </label>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width: ${(n.cantidad / maxNivel) * 100}%; background: #27ae60"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Solicitudes Carreras
+        async function loadSolicitudesCarreras() {
+            const response = await fetch(`${API_URL}/solicitudes-carreras`);
+            const solicitudes = await response.json();
+            
+            const filter = document.getElementById('filter-estado-carreras').value;
+            let filtered = solicitudes;
+            if (filter) {
+                filtered = solicitudes.filter(s => s.estado === filter);
+            }
+            
+            if (filtered.length === 0) {
+                document.getElementById('tabla-solicitudes-carreras').innerHTML = `
+                    <tr><td colspan="8" style="text-align: center; padding: 30px;">
+                        <i class="fas fa-inbox" style="font-size: 3rem; color: #ccc;"></i>
+                        <p style="color: #666; margin-top: 10px;">No hay solicitudes</p>
+                    </td></tr>
+                `;
+                return;
+            }
+            
+            document.getElementById('tabla-solicitudes-carreras').innerHTML = filtered.map(s => {
+                let acciones = '';
+                if (s.estado === 'pendiente') {
+                    acciones = `
+                        <button class="btn btn-success" onclick="aprobarSolicitudCarrera(${s.id})">
+                            <i class="fas fa-check"></i> Aprobar
+                        </button>
+                        <button class="btn btn-danger" onclick="rechazarSolicitudCarrera(${s.id})">
+                            <i class="fas fa-times"></i> Rechazar
+                        </button>
+                    `;
+                } else {
+                    acciones = `<span class="badge badge-${s.estado === 'aprobado' ? 'success' : 'danger'}">${s.estado === 'aprobado' ? 'Aprobada' : 'Rechazada'}</span>`;
+                    if (s.motivo_rechazo) {
+                        acciones += `<br><small style="color: #666;">${s.motivo_rechazo}</small>`;
+                    }
+                }
+                
+                let badge = '';
+                if (s.estado === 'pendiente') badge = '<span class="badge badge-warning">Pendiente</span>';
+                else if (s.estado === 'aprobado') badge = '<span class="badge badge-success">Aprobada</span>';
+                else badge = '<span class="badge badge-danger">Rechazada</span>';
+                
+                return `
+                    <tr>
+                        <td>${s.institucion_nombre || ''}</td>
+                        <td>${s.carrera_nombre || ''}</td>
+                        <td>${s.nivel_nombre || ''}</td>
+                        <td>${s.turno || '-'}</td>
+                        <td>${s.modalidad || 'Presencial'}</td>
+                        <td>${badge}</td>
+                        <td>${new Date(s.created_at).toLocaleDateString()}</td>
+                        <td>${acciones}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function aprobarSolicitudCarrera(id) {
+            if (confirm('¿Aprobar esta solicitud? La carrera se agregará a la oferta de la institución.')) {
+                await fetch(`${API_URL}/solicitudes-carreras/${id}/aprobar`, { method: 'PUT' });
+                loadSolicitudesCarreras();
+                loadDashboard();
+            }
+        }
+
+        async function rechazarSolicitudCarrera(id) {
+            const motivo = prompt('Ingrese el motivo del rechazo (opcional):');
+            await fetch(`${API_URL}/solicitudes-carreras/${id}/rechazar`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ motivo_rechazo: motivo || '' })
+            });
+            loadSolicitudesCarreras();
+        }
+
+        document.getElementById('filter-estado-carreras').addEventListener('change', loadSolicitudesCarreras);
+
+        // Historial
+        async function loadHistorial() {
+            const response = await fetch(`${API_URL}/historial`);
+            const historial = await response.json();
+            
+            if (historial.length === 0) {
+                document.getElementById('tabla-historial').innerHTML = `
+                    <tr><td colspan="5" style="text-align: center; padding: 30px;">
+                        <i class="fas fa-history" style="font-size: 3rem; color: #ccc;"></i>
+                        <p style="color: #666; margin-top: 10px;">No hay acciones registradas</p>
+                    </td></tr>
+                `;
+                return;
+            }
+            
+            document.getElementById('tabla-historial').innerHTML = historial.map(h => {
+                let iconAccion = '';
+                if (h.accion === 'aprobar') iconAccion = '<i class="fas fa-check-circle" style="color: #27ae60;"></i>';
+                else if (h.accion === 'rechazar') iconAccion = '<i class="fas fa-times-circle" style="color: #e74c3c;"></i>';
+                else if (h.accion === 'crear') iconAccion = '<i class="fas fa-plus-circle" style="color: #3498db;"></i>';
+                else if (h.accion === 'editar') iconAccion = '<i class="fas fa-edit" style="color: #f39c12;"></i>';
+                else if (h.accion === 'eliminar') iconAccion = '<i class="fas fa-trash" style="color: #e74c3c;"></i>';
+                else iconAccion = '<i class="fas fa-circle" style="color: #666;"></i>';
+                
+                let detalle = '-';
+                if (h.detalle) {
+                    try {
+                        const d = typeof h.detalle === 'string' ? JSON.parse(h.detalle) : h.detalle;
+                        detalle = Object.entries(d).map(([k, v]) => `${k}: ${v}`).join(', ');
+                    } catch (e) {
+                        detalle = h.detalle;
+                    }
+                }
+                
+                return `
+                    <tr>
+                        <td>${new Date(h.created_at).toLocaleString()}</td>
+                        <td>${h.usuario || 'Sistema'}</td>
+                        <td>${iconAccion} ${h.accion}</td>
+                        <td>${h.entidad}</td>
+                        <td><small>${detalle}</small></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
