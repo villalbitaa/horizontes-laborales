@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Horizontes San Miguel</title>
+    <link rel="icon" type="image/png" href="/static/multimedia/fotos/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        :root {
+            --primary: #2f80ed; --primary-dark: #1c6cd8; --primary-light: #4a9eff;
+            --bg-light: #f5f7fa; --bg-white: #ffffff;
+            --text-dark: #1a1a2e; --text-gray: #666687; --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --radius: 12px; --radius-sm: 8px;
+            --green: #10b981; --green-light: #d1fae5;
+            --yellow: #f59e0b; --yellow-light: #fef3c7;
+            --purple: #8b5cf6; --purple-light: #ede9fe;
+            --red: #ef4444; --red-light: #fee2e2;
+            --blue-light: #dbeafe;
+            --sidebar-bg: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        }
+        body { display: flex; min-height: 100vh; background: var(--bg-light); color: var(--text-dark); }
+
+        /* === LOGIN === */
+        .login-container {
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; width: 100%;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+        }
+        .login-box {
+            background: white; padding: 40px; border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 100%; max-width: 400px;
+        }
+        .login-box h2 { text-align: center; color: var(--text-dark); margin-bottom: 30px; font-size: 1.5rem; }
+        .login-box h2 i { color: var(--primary); margin-right: 10px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text-gray); font-weight: 500; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px 14px; border: 2px solid var(--border);
+            border-radius: var(--radius-sm); font-size: 0.95rem; transition: border-color 0.3s;
+            box-sizing: border-box; font-family: inherit;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,128,237,0.1);
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .btn {
+            padding: 10px 20px; border: none; border-radius: var(--radius-sm);
+            cursor: pointer; font-size: 0.9rem; font-weight: 600;
+            transition: all 0.3s; font-family: inherit; display: inline-flex;
+            align-items: center; gap: 8px; justify-content: center;
+        }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(47,128,237,0.4); }
+        .btn-primary.w-full { width: 100%; }
+        .btn-success { background: var(--green); color: white; }
+        .btn-success:hover { background: #059669; }
+        .btn-danger { background: var(--red); color: white; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-warning { background: var(--yellow); color: white; }
+        .btn-warning:hover { background: #d97706; }
+        .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text-gray); }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-sm { padding: 6px 14px; font-size: 0.82rem; }
+        .login-error { display: none; padding: 12px 16px; background: var(--red-light); color: var(--red); border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 0.9rem; text-align: center; }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            width: 250px; background: var(--sidebar-bg); color: white;
+            display: flex; flex-direction: column; position: fixed;
+            height: 100vh; z-index: 100;
+        }
+        .sidebar-header {
+            padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .sidebar-header .logo-icon {
+            width: 42px; height: 42px; background: white;
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; flex-shrink: 0; overflow: hidden; padding: 6px;
+        }
+        .sidebar-header .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .sidebar-header h1 { font-size: 1rem; font-weight: 600; line-height: 1.3; }
+        .sidebar-header span { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        .sidebar-user {
+            padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .sidebar-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+        }
+        .sidebar-user-info .name { font-size: 0.9rem; font-weight: 600; }
+        .sidebar-user-info .role { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        .menu { flex: 1; padding: 8px 0; }
+        .menu-item {
+            padding: 13px 20px; display: flex; align-items: center; gap: 14px;
+            cursor: pointer; transition: all 0.3s; border-left: 4px solid transparent;
+            margin: 2px 0; font-size: 0.9rem; font-weight: 500;
+        }
+        .menu-item:hover { background: rgba(255,255,255,0.05); border-left-color: var(--primary); }
+        .menu-item.active { background: rgba(47,128,237,0.15); border-left-color: var(--primary); }
+        .menu-item i { font-size: 1.1rem; width: 22px; text-align: center; }
+        .menu-item .badge-count {
+            margin-left: auto; background: var(--red); color: white;
+            font-size: 0.7rem; font-weight: 700; padding: 2px 8px;
+            border-radius: 10px; min-width: 20px; text-align: center;
+        }
+        .sidebar-footer {
+            padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar-footer .menu-item { padding: 10px 0; border-left: none; font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+        .sidebar-footer .menu-item:hover { color: white; background: none; }
+
+        /* === MAIN === */
+        .main-content { flex: 1; margin-left: 250px; display: flex; flex-direction: column; min-height: 100vh; }
+        .top-bar {
+            padding: 16px 32px; background: var(--bg-white); display: flex;
+            justify-content: space-between; align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 50;
+        }
+        .top-bar .page-title { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); }
+        .top-bar .page-subtitle { font-size: 0.85rem; color: var(--text-gray); margin-top: 2px; }
+        .top-bar .user-info { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--text-gray); }
+        .content-area { padding: 24px 28px; flex: 1; }
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* === STATS === */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+        .stat-card {
+            background: var(--bg-white); border-radius: var(--radius); padding: 20px;
+            box-shadow: var(--shadow); border: 1px solid var(--border);
+            display: flex; align-items: center; gap: 14px;
+        }
+        .stat-card .stat-icon {
+            width: 44px; height: 44px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; flex-shrink: 0;
+        }
+        .stat-card .stat-icon.blue { background: var(--blue-light); color: var(--primary); }
+        .stat-card .stat-icon.green { background: var(--green-light); color: var(--green); }
+        .stat-card .stat-icon.yellow { background: var(--yellow-light); color: var(--yellow); }
+        .stat-card .stat-icon.purple { background: var(--purple-light); color: var(--purple); }
+        .stat-card .stat-info h3 { font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
+        .stat-card .stat-info p { font-size: 0.82rem; color: var(--text-gray); margin-top: 2px; }
+
+        /* === TABLES === */
+        .table-container {
+            background: var(--bg-white); border-radius: var(--radius);
+            box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        th { background: var(--bg-light); color: var(--text-gray); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        tr:hover td { background: var(--bg-light); }
+        .table-actions { display: flex; gap: 6px; }
+
+        /* === BADGES === */
+        .badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+        }
+        .badge-green { background: var(--green-light); color: #065f46; }
+        .badge-yellow { background: var(--yellow-light); color: #92400e; }
+        .badge-blue { background: var(--blue-light); color: #1e40af; }
+        .badge-red { background: var(--red-light); color: #991b1b; }
+        .badge-purple { background: var(--purple-light); color: #5b21b6; }
+
+        /* === SEARCH BAR === */
+        .search-bar {
+            display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+        }
+        .search-bar input, .search-bar select {
+            padding: 10px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm);
+            font-size: 0.9rem; font-family: inherit; transition: border-color 0.3s;
+        }
+        .search-bar input:focus, .search-bar select:focus {
+            outline: none; border-color: var(--primary);
+        }
+        .search-bar input { flex: 1; min-width: 200px; }
+        .search-bar select { min-width: 160px; background: var(--bg-white); cursor: pointer; }
+
+        /* === TABS === */
+        .tabs {
+            display: flex; gap: 0; margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+        .tabs .tab {
+            padding: 10px 20px; background: none; border: none;
+            cursor: pointer; font-size: 0.9rem; font-weight: 500;
+            color: var(--text-gray); border-bottom: 3px solid transparent;
+            margin-bottom: -2px; transition: all 0.3s; font-family: inherit;
+        }
+        .tabs .tab:hover { color: var(--primary); }
+        .tabs .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* === CARDS === */
+        .card {
+            background: var(--bg-white); border-radius: var(--radius);
+            box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden;
+        }
+        .card-header {
+            padding: 16px 20px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .card-header h3 { font-size: 1rem; font-weight: 600; }
+        .card-header i { color: var(--primary); font-size: 1.1rem; }
+        .card-body { padding: 16px 20px; }
+
+        /* === MENSAJES 3-COLUMN LAYOUT === */
+        .mensajes-layout { display: grid; grid-template-columns: 320px 1fr 300px; gap: 20px; height: calc(100vh - 160px); }
+        .conv-list { overflow-y: auto; }
+        .conv-search { margin-bottom: 12px; }
+        .conv-search input { width: 100%; padding: 10px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 0.9rem; font-family: inherit; }
+        .conv-search input:focus { outline: none; border-color: var(--primary); }
+        .conv-item {
+            padding: 14px 16px; border-radius: var(--radius-sm);
+            cursor: pointer; transition: all 0.2s; border: 1px solid transparent;
+            margin-bottom: 4px;
+        }
+        .conv-item:hover { background: var(--bg-light); }
+        .conv-item.active { background: var(--blue-light); border-color: var(--primary); }
+        .conv-item .conv-name { font-size: 0.9rem; font-weight: 600; display: flex; justify-content: space-between; }
+        .conv-item .conv-name .unread { background: var(--primary); color: white; font-size: 0.7rem; padding: 1px 7px; border-radius: 10px; }
+        .conv-item .conv-preview { font-size: 0.82rem; color: var(--text-gray); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .conv-item .conv-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+        .conv-item .conv-date { font-size: 0.75rem; color: var(--text-light); }
+
+        /* Chat */
+        .chat-area { display: flex; flex-direction: column; height: calc(100vh - 160px); }
+        .chat-header-card {
+            padding: 16px 20px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .chat-header-card .inst-name { font-size: 1rem; font-weight: 600; }
+        .chat-header-card .inst-email { font-size: 0.82rem; color: var(--text-gray); }
+        .chat-msgs { flex: 1; overflow-y: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+        .chat-empty-state {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; color: var(--text-light); gap: 12px;
+        }
+        .chat-empty-state i { font-size: 3rem; }
+        .chat-bubble {
+            max-width: 75%; padding: 10px 14px; border-radius: 14px;
+            font-size: 0.88rem; line-height: 1.5; position: relative;
+        }
+        .chat-bubble.institucion {
+            align-self: flex-start; background: var(--bg-light); color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+        }
+        .chat-bubble.admin {
+            align-self: flex-end; background: var(--primary); color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-bubble .chat-time { font-size: 0.7rem; opacity: 0.6; margin-top: 4px; display: block; }
+        .chat-input-area {
+            padding: 12px 16px; border-top: 1px solid var(--border);
+            display: flex; gap: 10px;
+        }
+        .chat-input-area input {
+            flex: 1; padding: 10px 14px; border: 2px solid var(--border);
+            border-radius: var(--radius-sm); font-size: 0.9rem; font-family: inherit;
+        }
+        .chat-input-area input:focus { outline: none; border-color: var(--primary); }
+        .chat-input-area button {
+            width: 42px; height: 42px; border-radius: var(--radius-sm);
+            background: var(--primary); color: white; border: none;
+            cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center;
+        }
+        .chat-input-area button:hover { background: var(--primary-dark); }
+
+        /* Right panel */
+        .detail-card { margin-bottom: 16px; }
+        .detail-card .detail-row {
+            display: flex; justify-content: space-between; padding: 8px 0;
+            border-bottom: 1px solid var(--border); font-size: 0.88rem;
+        }
+        .detail-card .detail-row:last-child { border-bottom: none; }
+        .detail-card .detail-row .label { color: var(--text-gray); }
+        .detail-card .detail-row .value { font-weight: 500; text-align: right; }
+        .detail-actions { display: flex; flex-direction: column; gap: 8px; }
+        .detail-actions button { width: 100%; justify-content: center; }
+
+        /* === MODAL === */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); justify-content: center; align-items: center;
+            z-index: 1000; padding: 20px;
+        }
+        .modal-content {
+            background: white; padding: 28px; border-radius: var(--radius);
+            width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto;
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .modal-header h3 { font-size: 1.1rem; font-weight: 600; }
+        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-gray); }
+
+        /* === INSTITUCIONES TABLE === */
+        .inst-filter-bar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+        .inst-filter-bar input { flex: 1; min-width: 200px; padding: 10px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 0.9rem; font-family: inherit; }
+
+        /* === CARRERAS === */
+        .carreras-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+
+        .empty-state {
+            text-align: center; padding: 40px 20px; color: var(--text-gray);
+        }
+        .empty-state i { font-size: 2.5rem; color: var(--text-light); margin-bottom: 12px; }
+        .empty-state p { font-size: 0.9rem; }
+
+        /* === SOLICITUDES CAMBIO === */
+        .cambio-item {
+            padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+            margin-bottom: 10px; background: var(--bg-white);
+        }
+        .cambio-item .cambio-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .cambio-item .cambio-campo { font-weight: 600; font-size: 0.9rem; }
+        .cambio-item .cambio-inst { font-size: 0.82rem; color: var(--text-gray); }
+        .cambio-item .cambio-valores { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+        .cambio-item .cambio-old { background: var(--red-light); padding: 8px 10px; border-radius: 6px; font-size: 0.85rem; }
+        .cambio-item .cambio-old strong { color: var(--red); }
+        .cambio-item .cambio-new { background: var(--green-light); padding: 8px 10px; border-radius: 6px; font-size: 0.85rem; }
+        .cambio-item .cambio-new strong { color: var(--green); }
+
+        @media (max-width: 1200px) {
+            .mensajes-layout { grid-template-columns: 280px 1fr 260px; }
+        }
+        @media (max-width: 992px) {
+            .sidebar { width: 72px; }
+            .sidebar-header h1, .sidebar-header span, .sidebar-user-info, .menu-item span, .sidebar-footer .menu-item span { display: none; }
+            .sidebar-header .logo-icon { width: 36px; height: 36px; }
+            .sidebar-user { justify-content: center; padding: 12px; }
+            .menu-item { justify-content: center; padding: 14px; }
+            .menu-item i { font-size: 1.2rem; }
+            .main-content { margin-left: 72px; }
+            .content-area { padding: 20px; }
+            .top-bar { padding: 14px 20px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .mensajes-layout { grid-template-columns: 1fr; height: auto; }
+            .chat-area { height: 500px; }
+        }
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN -->
+    <div id="login-view" class="login-container">
+        <div class="login-box">
+            <h2><i class="fas fa-user-shield"></i> Admin Horizontes</h2>
+            <div id="login-error" class="login-error"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="usuario">Usuario</label>
+                    <input type="text" id="usuario" required>
+                </div>
+                <div class="form-group">
+                    <label for="contraseña">Contraseña</label>
+                    <input type="password" id="contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-full">Iniciar Sesión</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div id="admin-view" style="display:none;">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon"><img src="/static/multimedia/fotos/logo.png" alt="Logo"></div>
+                <div>
+                    <h1>Admin Panel</h1>
+                    <span>Jefatura San Miguel</span>
+                </div>
+            </div>
+            <div class="sidebar-user">
+                <div class="sidebar-avatar" id="sidebar-avatar">A</div>
+                <div class="sidebar-user-info">
+                    <div class="name" id="sidebar-name">Admin</div>
+                    <div class="role">Administrador</div>
+                </div>
+            </div>
+            <nav class="menu">
+                <div class="menu-item active" data-view="dashboard">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="menu-item" data-view="mensajes">
+                    <i class="fas fa-comments"></i>
+                    <span>Mensajes</span>
+                    <span class="badge-count" id="menu-msg-count" style="display:none;">0</span>
+                </div>
+                <div class="menu-item" data-view="carreras">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Gestión de Carreras</span>
+                </div>
+                <div class="menu-item" data-view="solicitudes">
+                    <i class="fas fa-file-text"></i>
+                    <span>Solicitudes</span>
+                    <span class="badge-count" id="menu-sol-count" style="display:none;">0</span>
+                </div>
+                <div class="menu-item" data-view="instituciones">
+                    <i class="fas fa-building"></i>
+                    <span>Instituciones</span>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="menu-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <div>
+                    <div class="page-title" id="view-title">Dashboard</div>
+                    <div class="page-subtitle" id="view-subtitle">Resumen general del sistema.</div>
+                </div>
+                <div class="user-info">
+                    <span id="topbar-user">Bienvenido, admin</span>
+                    <button class="btn btn-outline btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <!-- === DASHBOARD === -->
+                <div class="view active" id="view-dashboard">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue"><i class="fas fa-building"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-instituciones">0</h3>
+                                <p>Instituciones</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green"><i class="fas fa-graduation-cap"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-carreras">0</h3>
+                                <p>Carreras</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon yellow"><i class="fas fa-clock"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-pendientes">0</h3>
+                                <p>Solicitudes pendientes</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple"><i class="fas fa-users"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-usuarios">0</h3>
+                                <p>Usuarios</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                        <div class="card">
+                            <div class="card-header"><i class="fas fa-building-columns"></i><h3>Instituciones por tipo</h3></div>
+                            <div class="card-body" id="dash-instituciones-tipo"><p class="empty-state" style="padding:20px;">Cargando...</p></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><i class="fas fa-layer-group"></i><h3>Carreras por nivel</h3></div>
+                            <div class="card-body" id="dash-carreras-nivel"><p class="empty-state" style="padding:20px;">Cargando...</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === MENSAJES (3 COLUMNAS) === -->
+                <div class="view" id="view-mensajes">
+                    <div class="mensajes-layout">
+                        <!-- LEFT COL: Conversations -->
+                        <div class="card conv-list">
+                            <div class="card-header"><i class="fas fa-comments"></i><h3>Conversaciones</h3></div>
+                            <div class="card-body">
+                                <div class="conv-search">
+                                    <input type="text" id="conv-search" placeholder="Buscar conversación..." oninput="filtrarConversaciones()">
+                                </div>
+                                <select id="conv-filter" onchange="filtrarConversaciones()" style="width:100%;padding:8px 10px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;font-family:inherit;margin-bottom:12px;background:var(--bg-white);">
+                                    <option value="">Todos los estados</option>
+                                    <option value="no-leido">No leído</option>
+                                    <option value="respondido">Respondido</option>
+                                    <option value="en-revision">En revisión</option>
+                                </select>
+                                <div id="conversaciones-list"></div>
+                            </div>
+                        </div>
+
+                        <!-- CENTER COL: Chat -->
+                        <div class="card chat-area">
+                            <div class="chat-header-card">
+                                <div>
+                                    <div class="inst-name" id="chat-inst-name">Seleccioná una conversación</div>
+                                    <div class="inst-email" id="chat-inst-email"></div>
+                                </div>
+                                <div>
+                                    <span class="badge badge-blue" id="chat-status-badge" style="display:none;">En curso</span>
+                                </div>
+                            </div>
+                            <div class="chat-msgs" id="chat-msgs">
+                                <div class="chat-empty-state">
+                                    <i class="fas fa-comment-dots"></i>
+                                    <p>Seleccioná una conversación para ver los mensajes.</p>
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <input type="text" id="chat-input" placeholder="Escribí tu respuesta..." maxlength="500" disabled>
+                                <button id="chat-send-btn" disabled><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COL: Details -->
+                        <div class="card">
+                            <div class="card-header"><i class="fas fa-info-circle"></i><h3>Detalles</h3></div>
+                            <div class="card-body">
+                                <div id="chat-detail-content">
+                                    <div class="empty-state" style="padding:20px;"><p>Seleccioná una conversación</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === GESTIÓN DE CARRERAS === -->
+                <div class="view" id="view-carreras">
+                    <div class="carreras-header">
+                        <div>
+                            <h2 style="font-size:1.15rem;font-weight:700;">Carreras</h2>
+                            <p style="color:var(--text-gray);font-size:0.85rem;margin-top:2px;">Administrá la oferta académica.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openModal('carrera')">
+                            <i class="fas fa-plus"></i> Nueva Carrera
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" id="search-carreras" placeholder="Buscar carreras...">
+                        <select id="filter-nivel-carrera" style="padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:0.9rem;background:var(--bg-white);">
+                            <option value="">Todos los niveles</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>Nombre</th><th>Nivel</th><th>Duración</th><th>Área</th><th style="width:140px;">Acciones</th></tr>
+                            </thead>
+                            <tbody id="tabla-carreras"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- === SOLICITUDES === -->
+                <div class="view" id="view-solicitudes">
+                    <h2 style="font-size:1.15rem;font-weight:700;margin-bottom:4px;">Solicitudes</h2>
+                    <p style="color:var(--text-gray);font-size:0.85rem;margin-bottom:20px;">Gestioná las solicitudes de registro y cambios de instituciones.</p>
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchSolTab('registro')">Solicitudes de registro</button>
+                        <button class="tab" onclick="switchSolTab('cambio')">Solicitudes de cambio</button>
+                    </div>
+                    <div class="tab-content active" id="soltab-registro"></div>
+                    <div class="tab-content" id="soltab-cambio"></div>
+                </div>
+
+                <!-- === INSTITUCIONES === -->
+                <div class="view" id="view-instituciones">
+                    <h2 style="font-size:1.15rem;font-weight:700;margin-bottom:4px;">Instituciones</h2>
+                    <p style="color:var(--text-gray);font-size:0.85rem;margin-bottom:20px;">Listado de todas las instituciones registradas.</p>
+                    <div class="inst-filter-bar">
+                        <input type="text" id="search-instituciones" placeholder="Buscar institución..." oninput="filtrarInstituciones()">
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>CUE</th><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Tipo</th><th>Estado</th></tr>
+                            </thead>
+                            <tbody id="tabla-instituciones"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL CARRERA -->
+    <div id="modal-carrera" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-carrera-title">Nueva Carrera</h3>
+                <button class="close-modal" onclick="closeModal('carrera')">&times;</button>
+            </div>
+            <form id="form-carrera">
+                <input type="hidden" id="carrera-id-edit">
+                <div class="form-group">
+                    <label for="carrera-nombre">Nombre *</label>
+                    <input type="text" id="carrera-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-carrera-nivel">Nivel *</label>
+                    <select id="modal-carrera-nivel" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="carrera-duracion">Duración (años)</label>
+                    <input type="number" id="carrera-duracion" step="0.5">
+                </div>
+                <div class="form-group">
+                    <label for="carrera-descripcion">Descripción</label>
+                    <textarea id="carrera-descripcion" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-full">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL RECHAZAR REGISTRO -->
+    <div id="modal-rechazar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Rechazar Solicitud</h3>
+                <button class="close-modal" onclick="closeModal('rechazar')">&times;</button>
+            </div>
+            <form id="form-rechazar">
+                <input type="hidden" id="rechazar-solicitud-id">
+                <div class="form-group">
+                    <label for="motivo-rechazo">Motivo del rechazo</label>
+                    <textarea id="motivo-rechazo" rows="3" placeholder="Indicá el motivo del rechazo..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-danger w-full">Rechazar Solicitud</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL RECHAZAR CAMBIO -->
+    <div id="modal-rechazar-cambio" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Rechazar Solicitud de Cambio</h3>
+                <button class="close-modal" onclick="closeModal('rechazar-cambio')">&times;</button>
+            </div>
+            <form id="form-rechazar-cambio">
+                <input type="hidden" id="rechazar-cambio-id">
+                <div class="form-group">
+                    <label for="motivo-rechazo-cambio">Motivo del rechazo</label>
+                    <textarea id="motivo-rechazo-cambio" rows="3" placeholder="Indicá el motivo..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-danger w-full">Rechazar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        let currentUser = null;
+        let conversaciones = [];
+        let instDataMap = {};
+        let selectedCue = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const stored = localStorage.getItem('user');
+            if (stored) {
+                currentUser = JSON.parse(stored);
+                if (currentUser.rol === 'admin') showAdmin();
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+            const password = document.getElementById('contraseña').value;
+            try {
+                const res = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, password })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.user.rol !== 'admin') {
+                        document.getElementById('login-error').textContent = 'Solo administradores pueden acceder';
+                        document.getElementById('login-error').style.display = 'block';
+                        return;
+                    }
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    currentUser = data.user;
+                    showAdmin();
+                } else {
+                    document.getElementById('login-error').textContent = 'Usuario o contraseña incorrectos';
+                    document.getElementById('login-error').style.display = 'block';
+                }
+            } catch (e) {
+                document.getElementById('login-error').textContent = 'Error de conexión';
+                document.getElementById('login-error').style.display = 'block';
+            }
+        });
+
+        function showAdmin() {
+            document.getElementById('login-view').style.display = 'none';
+            document.getElementById('admin-view').style.display = 'block';
+
+            const name = currentUser.usuario || 'Admin';
+            document.getElementById('sidebar-avatar').textContent = name[0].toUpperCase();
+            document.getElementById('sidebar-name').textContent = name;
+            document.getElementById('topbar-user').textContent = `Bienvenido, ${name}`;
+
+            initSidebar();
+            loadDashboard();
+            loadNivelesSelect();
+            loadCarreras();
+            loadInstituciones();
+            loadSolicitudesRegistro();
+            loadConversaciones();
+        }
+
+        function initSidebar() {
+            document.querySelectorAll('.menu-item[data-view]').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.menu-item[data-view]').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    const v = item.dataset.view;
+                    document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+                    document.getElementById(`view-${v}`).classList.add('active');
+                    const titles = {
+                        dashboard: ['Dashboard', 'Resumen general del sistema.'],
+                        mensajes: ['Mensajes', 'Comunicación con las instituciones.'],
+                        carreras: ['Gestión de Carreras', 'Administrá la oferta académica.'],
+                        solicitudes: ['Solicitudes', 'Gestioná solicitudes de registro y cambios.'],
+                        instituciones: ['Instituciones', 'Listado de instituciones registradas.']
+                    };
+                    document.getElementById('view-title').textContent = titles[v][0];
+                    document.getElementById('view-subtitle').textContent = titles[v][1];
+                    if (v === 'dashboard') loadDashboard();
+                    if (v === 'mensajes') { loadConversaciones(); }
+                    if (v === 'carreras') loadCarreras();
+                    if (v === 'solicitudes') { loadSolicitudesRegistro(); loadSolicitudesCambio(); }
+                    if (v === 'instituciones') loadInstituciones();
+                });
+            });
+        }
+
+        // === DASHBOARD ===
+        async function loadDashboard() {
+            try {
+                const res = await fetch(`${API_URL}/dashboard`);
+                const d = await res.json();
+                document.getElementById('stat-instituciones').textContent = d.total_instituciones || 0;
+                document.getElementById('stat-carreras').textContent = d.total_carreras || 0;
+                document.getElementById('stat-pendientes').textContent = d.solicitudes_pendientes || 0;
+                document.getElementById('stat-usuarios').textContent = d.total_usuarios || 0;
+
+                const tipoHtml = (d.instituciones_por_tipo || []).map(t =>
+                    `<div class="detail-row"><span class="label">${t.nombre}</span><span class="value">${t.cantidad || 0}</span></div>`
+                ).join('') || '<p style="color:var(--text-gray);font-size:0.85rem;">Sin datos</p>';
+                document.getElementById('dash-instituciones-tipo').innerHTML = tipoHtml;
+
+                const nivelHtml = (d.carreras_por_nivel || []).map(n =>
+                    `<div class="detail-row"><span class="label">${n.nombre}</span><span class="value">${n.cantidad || 0}</span></div>`
+                ).join('') || '<p style="color:var(--text-gray);font-size:0.85rem;">Sin datos</p>';
+                document.getElementById('dash-carreras-nivel').innerHTML = nivelHtml;
+
+                // Badge counts
+                const solRes = await fetch(`${API_URL}/solicitudes`);
+                const sols = await solRes.json();
+                const pend = sols.filter(s => s.estado === 'pendiente');
+                document.getElementById('menu-sol-count').textContent = pend.length;
+                document.getElementById('menu-sol-count').style.display = pend.length > 0 ? '' : 'none';
+            } catch (e) {}
+        }
+
+        // === MENSAJES ===
+        async function loadConversaciones() {
+            try {
+                const res = await fetch(`${API_URL}/admin/conversaciones`);
+                conversaciones = await res.json();
+                renderConversaciones();
+            } catch (e) {}
+        }
+
+        function renderConversaciones() {
+            const container = document.getElementById('conversaciones-list');
+            const filter = document.getElementById('conv-filter').value;
+            const search = document.getElementById('conv-search').value.toLowerCase();
+
+            let filtered = conversaciones;
+            if (search) filtered = filtered.filter(c => c.institucion_nombre.toLowerCase().includes(search));
+            if (filter === 'no-leido') filtered = filtered.filter(c => c.no_leidos > 0);
+            if (filter === 'respondido') filtered = filtered.filter(c => c.no_leidos === 0 && c.ultimo_remitente === 'admin');
+            if (filter === 'en-revision') filtered = filtered.filter(c => c.no_leidos > 0);
+
+            const totalNoLeidos = conversaciones.reduce((s, c) => s + (c.no_leidos || 0), 0);
+            const badge = document.getElementById('menu-msg-count');
+            if (totalNoLeidos > 0) { badge.textContent = totalNoLeidos; badge.style.display = ''; }
+            else badge.style.display = 'none';
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state" style="padding:30px 10px;"><p>Sin conversaciones</p></div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(c => {
+                const estado = c.no_leidos > 0 ? 'En revisión' : (c.ultimo_remitente === 'admin' ? 'Respondido' : 'En revisión');
+                const badgeCls = c.no_leidos > 0 ? 'badge-yellow' : (c.ultimo_remitente === 'admin' ? 'badge-green' : 'badge-blue');
+                const active = selectedCue === c.institucion_cue ? 'active' : '';
+                return `
+                    <div class="conv-item ${active}" onclick="seleccionarConversacion('${c.institucion_cue}')" data-cue="${c.institucion_cue}">
+                        <div class="conv-name">
+                            ${c.institucion_nombre}
+                            ${c.no_leidos > 0 ? `<span class="unread">${c.no_leidos}</span>` : ''}
+                        </div>
+                        <div class="conv-preview">${c.ultimo_remitente === 'admin' ? 'Tú: ' : ''}${escapeHtml(c.ultimo_mensaje || '')}</div>
+                        <div class="conv-meta">
+                            <span class="badge ${badgeCls}">${estado}</span>
+                            <span class="conv-date">${formatDate(c.fecha_ultimo)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filtrarConversaciones() { renderConversaciones(); }
+
+        let chatLoaded = false;
+        async function seleccionarConversacion(cue) {
+            selectedCue = cue;
+            renderConversaciones();
+
+            document.querySelectorAll('.conv-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.cue === cue);
+            });
+
+            document.getElementById('chat-input').disabled = false;
+            document.getElementById('chat-send-btn').disabled = false;
+
+            try {
+                const res = await fetch(`${API_URL}/admin/mensajes/${cue}`);
+                const mensajes = await res.json();
+                const instRes = await fetch(`${API_URL}/instituciones/${cue}`);
+                const inst = res.ok ? await instRes.json() : {};
+                
+                instDataMap[cue] = inst;
+
+                document.getElementById('chat-inst-name').textContent = inst.nombre || 'Institución';
+                document.getElementById('chat-inst-email').textContent = inst.email || '';
+
+                const tieneRespuesta = mensajes.some(m => m.remitente === 'admin');
+                const badge = document.getElementById('chat-status-badge');
+                if (tieneRespuesta) {
+                    badge.textContent = 'Respondido';
+                    badge.className = 'badge badge-green';
+                    badge.style.display = '';
+                } else {
+                    badge.textContent = 'En curso';
+                    badge.className = 'badge badge-blue';
+                    badge.style.display = '';
+                }
+
+                const chatMsgs = document.getElementById('chat-msgs');
+                if (mensajes.length === 0) {
+                    chatMsgs.innerHTML = '<div class="chat-empty-state"><i class="fas fa-comment-dots"></i><p>Sin mensajes. Escribí algo.</p></div>';
+                } else {
+                    chatMsgs.innerHTML = mensajes.map(m => {
+                        const isAdmin = m.remitente === 'admin';
+                        return `
+                            <div class="chat-bubble ${isAdmin ? 'admin' : 'institucion'}">
+                                <small style="font-weight:600;opacity:0.8;">${isAdmin ? 'Tú' : inst.nombre || 'Institución'}</small>
+                                <div>${escapeHtml(m.contenido)}</div>
+                                <span class="chat-time">${formatDate(m.created_at)}</span>
+                            </div>
+                        `;
+                    }).join('');
+                }
+                chatMsgs.scrollTop = chatMsgs.scrollHeight;
+
+                // Right panel details
+                document.getElementById('chat-detail-content').innerHTML = `
+                    <div class="detail-card">
+                        <h4 style="font-size:0.9rem;font-weight:600;margin-bottom:10px;">Institución</h4>
+                        <div class="detail-row"><span class="label">Nombre</span><span class="value">${inst.nombre || '—'}</span></div>
+                        <div class="detail-row"><span class="label">Email</span><span class="value">${inst.email || '—'}</span></div>
+                        <div class="detail-row"><span class="label">Teléfono</span><span class="value">${inst.telefono || '—'}</span></div>
+                    </div>
+                    <div class="detail-card">
+                        <h4 style="font-size:0.9rem;font-weight:600;margin-bottom:10px;">Información</h4>
+                        <div class="detail-row"><span class="label">Inicio</span><span class="value">${mensajes.length > 0 ? formatDate(mensajes[0].created_at) : '—'}</span></div>
+                        <div class="detail-row"><span class="label">Último mensaje</span><span class="value">${mensajes.length > 0 ? formatDate(mensajes[mensajes.length-1].created_at) : '—'}</span></div>
+                        <div class="detail-row"><span class="label">Estado</span><span class="value"><span class="badge ${tieneRespuesta ? 'badge-green' : 'badge-blue'}">${tieneRespuesta ? 'Respondido' : 'En curso'}</span></span></div>
+                    </div>
+                    <div class="detail-card">
+                        <h4 style="font-size:0.9rem;font-weight:600;margin-bottom:10px;">Acciones</h4>
+                        <div class="detail-actions">
+                            <button class="btn btn-outline btn-sm" onclick="switchToView('solicitudes')">
+                                <i class="fas fa-file-text"></i> Ver solicitudes
+                            </button>
+                        </div>
+                    </div>
+                `;
+                chatLoaded = true;
+            } catch (e) {}
+        }
+
+        document.getElementById('chat-send-btn').addEventListener('click', enviarRespuesta);
+        document.getElementById('chat-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') enviarRespuesta();
+        });
+
+        async function enviarRespuesta() {
+            if (!selectedCue) return;
+            const input = document.getElementById('chat-input');
+            const contenido = input.value.trim();
+            if (!contenido) return;
+            input.value = '';
+            try {
+                await fetch(`${API_URL}/mensajes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        institucion_cue: selectedCue,
+                        contenido,
+                        remitente: 'admin'
+                    })
+                });
+                await loadConversaciones();
+                await seleccionarConversacion(selectedCue);
+            } catch (e) {}
+        }
+
+        function switchToView(view) {
+            document.querySelector(`.menu-item[data-view="${view}"]`)?.click();
+        }
+
+        // === CARRERAS ===
+        async function loadNivelesSelect() {
+            try {
+                const res = await fetch(`${API_URL}/niveles`);
+                const niveles = await res.json();
+                const opts = niveles.map(n => `<option value="${n.id}">${n.nombre}</option>`).join('');
+                document.getElementById('modal-carrera-nivel').innerHTML = opts;
+                document.getElementById('filter-nivel-carrera').innerHTML = '<option value="">Todos los niveles</option>' + opts;
+            } catch (e) {}
+        }
+
+        function formatDuracion(meses) {
+            if (!meses) return '';
+            const a = Math.floor(meses / 12);
+            const r = meses % 12;
+            let s = '';
+            if (a > 0) s += a + (a === 1 ? ' año' : ' años');
+            if (r > 0) s += (s ? ' ' : '') + r + (r === 1 ? ' mes' : ' meses');
+            return s;
+        }
+
+        async function loadCarreras() {
+            try {
+                const res = await fetch(`${API_URL}/carreras`);
+                const carreras = await res.json();
+                const tabla = document.getElementById('tabla-carreras');
+                if (carreras.length === 0) {
+                    tabla.innerHTML = '<tr><td colspan="5" class="empty-state" style="padding:30px;">Sin carreras registradas</td></tr>';
+                    return;
+                }
+                tabla.innerHTML = carreras.map(c => `
+                    <tr>
+                        <td>${c.nombre}</td>
+                        <td>${c.nivel_nombre || ''}</td>
+                        <td>${formatDuracion(c.duracion_meses) || '-'}</td>
+                        <td>${c.area_nombre || '-'}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-warning btn-sm" onclick="editCarrera(${c.id})"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteCarrera(${c.id})"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {}
+        }
+
+        document.getElementById('form-carrera').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('carrera-id-edit').value;
+            const da = parseFloat(document.getElementById('carrera-duracion').value) || null;
+            const data = {
+                nombre: document.getElementById('carrera-nombre').value,
+                nivel_id: parseInt(document.getElementById('modal-carrera-nivel').value),
+                duracion_meses: da ? Math.round(da * 12) : null,
+                descripcion: document.getElementById('carrera-descripcion').value
+            };
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/ofertas/${id}` : `${API_URL}/ofertas`;
+            await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+            closeModal('carrera');
+            document.getElementById('form-carrera').reset();
+            document.getElementById('carrera-id-edit').value = '';
+            loadCarreras();
+        });
+
+        async function editCarrera(id) {
+            const res = await fetch(`${API_URL}/ofertas/${id}`);
+            const c = await res.json();
+            document.getElementById('carrera-id-edit').value = c.id;
+            document.getElementById('carrera-nombre').value = c.nombre;
+            document.getElementById('modal-carrera-nivel').value = c.nivel_id;
+            document.getElementById('carrera-duracion').value = c.duracion_meses ? (c.duracion_meses / 12).toFixed(1) : '';
+            document.getElementById('carrera-descripcion').value = c.descripcion || '';
+            openModal('carrera');
+        }
+
+        async function deleteCarrera(id) {
+            if (confirm('¿Eliminar esta carrera?')) {
+                await fetch(`${API_URL}/ofertas/${id}`, { method: 'DELETE' });
+                loadCarreras();
+            }
+        }
+
+        document.getElementById('search-carreras').addEventListener('input', function() {
+            const t = this.value.toLowerCase();
+            document.querySelectorAll('#tabla-carreras tr').forEach(r => {
+                r.style.display = r.querySelector('td')?.textContent.toLowerCase().includes(t) ? '' : 'none';
+            });
+        });
+
+        // === SOLICITUDES ===
+        function switchSolTab(tab) {
+            document.querySelectorAll('#view-solicitudes .tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#view-solicitudes .tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`#view-solicitudes .tab[onclick*="'${tab}'"]`).classList.add('active');
+            document.getElementById(`soltab-${tab}`).classList.add('active');
+            if (tab === 'registro') loadSolicitudesRegistro();
+            else loadSolicitudesCambio();
+        }
+
+        async function loadSolicitudesRegistro() {
+            try {
+                const res = await fetch(`${API_URL}/solicitudes`);
+                const sols = await res.json();
+                const pendientes = sols.filter(s => s.estado === 'pendiente');
+                const procesadas = sols.filter(s => s.estado !== 'pendiente');
+
+                let html = '';
+                if (pendientes.length === 0) {
+                    html = '<div class="card"><div class="card-body"><div class="empty-state"><i class="fas fa-check-circle" style="color:var(--green);"></i><p>No hay solicitudes pendientes</p></div></div></div>';
+                } else {
+                    html = `<div class="table-container"><table><thead><tr><th>CUE</th><th>Nombre</th><th>Email</th><th>Barrio</th><th>Fecha</th><th style="width:180px;">Acciones</th></tr></thead><tbody>
+                        ${pendientes.map(s => `
+                            <tr>
+                                <td><strong>${s.cue || '-'}</strong></td>
+                                <td>${s.nombre_establecimiento || s.nombre_contacto || '-'}</td>
+                                <td>${s.email || '-'}</td>
+                                <td>${s.barrio || '-'}</td>
+                                <td>${s.created_at ? new Date(s.created_at).toLocaleDateString() : '-'}</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="btn btn-success btn-sm" onclick="aprobarSolicitud(${s.id})"><i class="fas fa-check"></i></button>
+                                        <button class="btn btn-danger btn-sm" onclick="abrirRechazar(${s.id})"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody></table></div>`;
+                }
+
+                if (procesadas.length > 0) {
+                    html += `<div style="margin-top:20px;"><h4 style="font-size:0.9rem;font-weight:600;margin-bottom:10px;color:var(--text-gray);">Historial</h4>
+                        <div class="table-container"><table><thead><tr><th>CUE</th><th>Nombre</th><th>Email</th><th>Estado</th><th>Motivo</th></tr></thead><tbody>
+                        ${procesadas.map(s => `
+                            <tr>
+                                <td>${s.cue || '-'}</td>
+                                <td>${s.nombre_establecimiento || '-'}</td>
+                                <td>${s.email || '-'}</td>
+                                <td><span class="badge ${s.estado === 'aprobado' ? 'badge-green' : 'badge-red'}">${s.estado}</span></td>
+                                <td style="font-size:0.82rem;color:var(--text-gray);">${s.motivo_rechazo || '-'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody></table></div></div>`;
+                }
+
+                document.getElementById('soltab-registro').innerHTML = html;
+                document.getElementById('menu-sol-count').textContent = pendientes.length;
+                document.getElementById('menu-sol-count').style.display = pendientes.length > 0 ? '' : 'none';
+            } catch (e) {}
+        }
+
+        async function aprobarSolicitud(id) {
+            if (!confirm('¿Aprobar solicitud? Se creará un usuario para la institución.')) return;
+            try {
+                const res = await fetch(`${API_URL}/solicitudes/${id}/aprobar`, { method: 'PUT' });
+                const data = await res.json();
+                alert(data.message || 'Aprobada');
+                loadSolicitudesRegistro();
+            } catch (e) { alert('Error'); }
+        }
+
+        function abrirRechazar(id) {
+            document.getElementById('rechazar-solicitud-id').value = id;
+            document.getElementById('motivo-rechazo').value = '';
+            openModal('rechazar');
+        }
+
+        document.getElementById('form-rechazar').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('rechazar-solicitud-id').value;
+            const motivo = document.getElementById('motivo-rechazo').value;
+            try {
+                await fetch(`${API_URL}/solicitudes/${id}/rechazar`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ motivo_rechazo: motivo })
+                });
+                closeModal('rechazar');
+                loadSolicitudesRegistro();
+            } catch (e) {}
+        });
+
+        async function loadSolicitudesCambio() {
+            try {
+                const res = await fetch(`${API_URL}/admin/solicitudes-cambio`);
+                const sols = await res.json();
+                const pendientes = sols.filter(s => s.estado === 'pendiente');
+                const procesadas = sols.filter(s => s.estado !== 'pendiente');
+
+                let html = '';
+                if (pendientes.length === 0) {
+                    html = '<div class="card"><div class="card-body"><div class="empty-state"><i class="fas fa-check-circle" style="color:var(--green);"></i><p>No hay solicitudes de cambio pendientes</p></div></div></div>';
+                } else {
+                    html = `<div style="margin-bottom:20px;"><h4 style="font-size:0.9rem;font-weight:600;margin-bottom:12px;">Pendientes (${pendientes.length})</h4>`;
+                    for (const s of pendientes) {
+                        const instRes = await fetch(`${API_URL}/instituciones/${s.institucion_cue}`);
+                        const inst = await instRes.json();
+                        html += `
+                            <div class="cambio-item">
+                                <div class="cambio-header">
+                                    <div>
+                                        <div class="cambio-campo"><i class="fas fa-pen"></i> ${s.campo}</div>
+                                        <div class="cambio-inst">${inst.nombre || s.institucion_cue}</div>
+                                    </div>
+                                    <span class="badge badge-yellow">Pendiente</span>
+                                </div>
+                                <div class="cambio-valores">
+                                    <div class="cambio-old"><strong>Anterior:</strong> ${escapeHtml(s.valor_actual || '—')}</div>
+                                    <div class="cambio-new"><strong>Nuevo:</strong> ${escapeHtml(s.valor_nuevo || '—')}</div>
+                                </div>
+                                <div style="display:flex;gap:8px;margin-top:8px;">
+                                    <button class="btn btn-success btn-sm" onclick="aprobarCambio(${s.id})"><i class="fas fa-check"></i> Aprobar</button>
+                                    <button class="btn btn-danger btn-sm" onclick="abrirRechazarCambio(${s.id})"><i class="fas fa-times"></i> Rechazar</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    html += '</div>';
+                }
+
+                if (procesadas.length > 0) {
+                    html += `<h4 style="font-size:0.9rem;font-weight:600;margin-bottom:10px;color:var(--text-gray);">Historial</h4>`;
+                    for (const s of procesadas) {
+                        const instRes = await fetch(`${API_URL}/instituciones/${s.institucion_cue}`);
+                        const inst = await instRes.json();
+                        html += `
+                            <div class="cambio-item">
+                                <div class="cambio-header">
+                                    <div>
+                                        <div class="cambio-campo">${s.campo}</div>
+                                        <div class="cambio-inst">${inst.nombre || s.institucion_cue}</div>
+                                    </div>
+                                    <span class="badge ${s.estado === 'aprobado' ? 'badge-green' : 'badge-red'}">${s.estado}</span>
+                                </div>
+                                <div class="cambio-valores">
+                                    <div class="cambio-old"><strong>Anterior:</strong> ${escapeHtml(s.valor_actual || '—')}</div>
+                                    <div class="cambio-new"><strong>Nuevo:</strong> ${escapeHtml(s.valor_nuevo || '—')}</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                document.getElementById('soltab-cambio').innerHTML = html;
+            } catch (e) {}
+        }
+
+        async function aprobarCambio(id) {
+            if (!confirm('¿Aprobar este cambio? Se aplicará automáticamente a la institución.')) return;
+            try {
+                const res = await fetch(`${API_URL}/admin/solicitudes-cambio/${id}/aprobar`, { method: 'PUT' });
+                const data = await res.json();
+                alert(data.message || 'Cambio aprobado');
+                loadSolicitudesCambio();
+            } catch (e) {}
+        }
+
+        function abrirRechazarCambio(id) {
+            document.getElementById('rechazar-cambio-id').value = id;
+            document.getElementById('motivo-rechazo-cambio').value = '';
+            openModal('rechazar-cambio');
+        }
+
+        document.getElementById('form-rechazar-cambio').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('rechazar-cambio-id').value;
+            const motivo = document.getElementById('motivo-rechazo-cambio').value;
+            try {
+                await fetch(`${API_URL}/admin/solicitudes-cambio/${id}/rechazar`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ motivo_rechazo: motivo })
+                });
+                closeModal('rechazar-cambio');
+                loadSolicitudesCambio();
+            } catch (e) {}
+        });
+
+        // === INSTITUCIONES ===
+        async function loadInstituciones() {
+            try {
+                const [instRes, usuariosRes] = await Promise.all([
+                    fetch(`${API_URL}/instituciones`),
+                    fetch(`${API_URL}/usuarios`)
+                ]);
+                const instituciones = await instRes.json();
+                const usuarios = await usuariosRes.json();
+
+                const tabla = document.getElementById('tabla-instituciones');
+                if (instituciones.length === 0) {
+                    tabla.innerHTML = '<tr><td colspan="6" class="empty-state" style="padding:30px;">Sin instituciones</td></tr>';
+                    return;
+                }
+                tabla.innerHTML = instituciones.map(i => {
+                    const user = usuarios.find(u => u.institucion_cue === i.cue);
+                    const estado = user ? 'Aprobado' : 'Pendiente';
+                    const badgeCls = user ? 'badge-green' : 'badge-yellow';
+                    return `
+                        <tr>
+                            <td><strong>${i.cue}</strong></td>
+                            <td>${i.nombre || '-'}</td>
+                            <td>${i.email || '-'}</td>
+                            <td>${i.telefono || '-'}</td>
+                            <td>${i.tipo_nombre || '-'}</td>
+                            <td><span class="badge ${badgeCls}">${estado}</span></td>
+                        </tr>
+                    `;
+                }).join('');
+                window.instTableData = { instituciones, usuarios };
+            } catch (e) {}
+        }
+
+        function filtrarInstituciones() {
+            const t = document.getElementById('search-instituciones').value.toLowerCase();
+            document.querySelectorAll('#tabla-instituciones tr').forEach(r => {
+                r.style.display = r.textContent.toLowerCase().includes(t) ? '' : 'none';
+            });
+        }
+
+        // === MODAL HELPERS ===
+        function openModal(type) { document.getElementById(`modal-${type}`).style.display = 'flex'; }
+        function closeModal(type) { document.getElementById(`modal-${type}`).style.display = 'none'; }
+        window.onclick = (e) => {
+            document.querySelectorAll('.modal').forEach(m => {
+                if (e.target === m) m.style.display = 'none';
+            });
+        };
+
+        // === UTILS ===
+        function formatDate(d) {
+            if (!d) return '';
+            return new Date(d).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+        }
+        function escapeHtml(t) {
+            const d = document.createElement('div');
+            d.textContent = t || '';
+            return d.innerHTML;
+        }
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>

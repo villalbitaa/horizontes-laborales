@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Institución - Horizontes San Miguel</title>
+    <link rel="icon" type="image/png" href="/static/multimedia/fotos/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        :root {
+            --primary: #2f80ed;
+            --primary-dark: #1c6cd8;
+            --primary-light: #4a9eff;
+            --bg-light: #f5f7fa;
+            --bg-white: #ffffff;
+            --text-dark: #1a1a2e;
+            --text-gray: #666687;
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --green: #10b981;
+            --green-light: #d1fae5;
+            --yellow: #f59e0b;
+            --yellow-light: #fef3c7;
+            --purple: #8b5cf6;
+            --purple-light: #ede9fe;
+            --red: #ef4444;
+            --red-light: #fee2e2;
+            --blue-light: #dbeafe;
+            --sidebar-bg: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        }
+        body { display: flex; min-height: 100vh; background: var(--bg-light); color: var(--text-dark); }
+
+        /* ===== LOGIN ===== */
+        .login-container {
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; width: 100%;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+        }
+        .login-box {
+            background: white; padding: 40px; border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 100%; max-width: 400px;
+        }
+        .login-box h2 { text-align: center; color: var(--text-dark); margin-bottom: 30px; font-size: 1.5rem; }
+        .login-box h2 i { color: var(--primary); margin-right: 10px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text-gray); font-weight: 500; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px 14px; border: 2px solid var(--border);
+            border-radius: var(--radius-sm); font-size: 0.95rem; transition: border-color 0.3s;
+            box-sizing: border-box; font-family: inherit;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,128,237,0.1);
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .btn {
+            padding: 12px 24px; border: none; border-radius: var(--radius-sm);
+            cursor: pointer; font-size: 0.95rem; font-weight: 600;
+            transition: all 0.3s; font-family: inherit; display: inline-flex;
+            align-items: center; gap: 8px; justify-content: center;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; width: 100%;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(47,128,237,0.4); }
+        .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+        .btn-outline {
+            background: transparent; border: 2px solid var(--border); color: var(--text-gray);
+        }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-danger { background: var(--red); color: white; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-success { background: var(--green); color: white; }
+        .btn-success:hover { background: #059669; }
+        .login-error { display: none; padding: 12px 16px; background: var(--red-light); color: var(--red); border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 0.9rem; text-align: center; }
+        .login-footer { text-align: center; margin-top: 20px; color: var(--text-gray); font-size: 0.9rem; }
+        .login-footer a { color: var(--primary); text-decoration: none; font-weight: 500; }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 260px; background: var(--sidebar-bg); color: white;
+            display: flex; flex-direction: column; position: fixed;
+            height: 100vh; z-index: 100; transition: width 0.3s;
+        }
+        .sidebar-header {
+            padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .sidebar-header .logo-icon {
+            width: 42px; height: 42px; background: white;
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; flex-shrink: 0; overflow: hidden; padding: 6px;
+        }
+        .sidebar-header .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .sidebar-header h1 { font-size: 1rem; font-weight: 600; line-height: 1.3; }
+        .sidebar-header span { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        .sidebar-user {
+            padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .sidebar-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+        }
+        .sidebar-user-info .name { font-size: 0.9rem; font-weight: 600; }
+        .sidebar-user-info .role { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        .menu { flex: 1; padding: 12px 0; }
+        .menu-item {
+            padding: 14px 20px; display: flex; align-items: center; gap: 14px;
+            cursor: pointer; transition: all 0.3s; border-left: 4px solid transparent;
+            margin: 2px 0; font-size: 0.9rem; font-weight: 500;
+        }
+        .menu-item:hover { background: rgba(255,255,255,0.05); border-left-color: var(--primary); }
+        .menu-item.active { background: rgba(47,128,237,0.15); border-left-color: var(--primary); }
+        .menu-item i { font-size: 1.1rem; width: 22px; text-align: center; }
+        .sidebar-footer {
+            padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar-footer .menu-item { padding: 10px 0; border-left: none; font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+        .sidebar-footer .menu-item:hover { color: white; background: none; }
+
+        /* ===== MAIN ===== */
+        .main-content { flex: 1; margin-left: 260px; display: flex; flex-direction: column; min-height: 100vh; }
+        .top-bar {
+            padding: 16px 32px; background: var(--bg-white); display: flex;
+            justify-content: space-between; align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 50;
+        }
+        .top-bar .page-title { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); }
+        .top-bar .page-subtitle { font-size: 0.85rem; color: var(--text-gray); margin-top: 2px; }
+        .top-bar .user-info { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--text-gray); }
+        .content-area { padding: 28px 32px; flex: 1; }
+
+        /* ===== VIEWS ===== */
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ===== STATS CARDS ===== */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 28px; }
+        .stat-card {
+            background: var(--bg-white); border-radius: var(--radius); padding: 24px;
+            box-shadow: var(--shadow); border: 1px solid var(--border);
+            display: flex; align-items: flex-start; gap: 16px;
+        }
+        .stat-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0;
+        }
+        .stat-icon.blue { background: var(--blue-light); color: var(--primary); }
+        .stat-icon.green { background: var(--green-light); color: var(--green); }
+        .stat-icon.yellow { background: var(--yellow-light); color: var(--yellow); }
+        .stat-icon.purple { background: var(--purple-light); color: var(--purple); }
+        .stat-info h3 { font-size: 1.75rem; font-weight: 700; line-height: 1.2; }
+        .stat-info p { font-size: 0.85rem; color: var(--text-gray); margin-top: 2px; }
+
+        /* ===== DASHBOARD CARDS ===== */
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .dash-card {
+            background: var(--bg-white); border-radius: var(--radius);
+            box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden;
+        }
+        .dash-card-header {
+            padding: 18px 24px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .dash-card-header h3 { font-size: 1rem; font-weight: 600; }
+        .dash-card-header i { color: var(--primary); font-size: 1.1rem; }
+        .dash-card-body { padding: 16px 24px 20px; }
+        .info-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px solid var(--border);
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-row .label { font-size: 0.85rem; color: var(--text-gray); }
+        .info-row .value { font-size: 0.9rem; font-weight: 500; color: var(--text-dark); }
+
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-badge.approved { background: var(--green-light); color: #065f46; }
+        .status-badge.pending { background: var(--yellow-light); color: #92400e; }
+        .status-badge.active { background: var(--blue-light); color: #1e40af; }
+        .status-badge.review { background: var(--purple-light); color: #5b21b6; }
+
+        .carrera-mini-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px solid var(--border);
+        }
+        .carrera-mini-item:last-child { border-bottom: none; }
+        .carrera-mini-item .carrera-name { font-size: 0.9rem; font-weight: 500; }
+        .carrera-mini-item .carrera-meta { display: flex; align-items: center; gap: 10px; }
+        .carrera-mini-item .carrera-date { font-size: 0.8rem; color: var(--text-light); }
+
+        .msg-mini-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px solid var(--border);
+        }
+        .msg-mini-item:last-child { border-bottom: none; }
+        .msg-mini-item .msg-title { font-size: 0.9rem; font-weight: 500; }
+        .msg-mini-item .msg-meta { display: flex; align-items: center; gap: 10px; }
+        .msg-mini-item .msg-date { font-size: 0.8rem; color: var(--text-light); }
+        .msg-preview { font-size: 0.8rem; color: var(--text-gray); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 240px; }
+
+        /* ===== MI INSTITUCION VIEW ===== */
+        .inst-form { max-width: 600px; }
+        .inst-form .form-row { margin-bottom: 20px; }
+        .inst-form label { display: block; margin-bottom: 6px; color: var(--text-gray); font-weight: 500; font-size: 0.9rem; }
+        .inst-form input { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 0.95rem; transition: border-color 0.3s; font-family: inherit; }
+        .inst-form input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(47,128,237,0.1); }
+        .inst-form .input-icon-wrap { position: relative; }
+        .inst-form .input-icon-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-light); }
+        .inst-form .input-icon-wrap input { padding-left: 42px; }
+        .save-msg { font-size: 0.85rem; color: var(--green); display: none; margin-left: 12px; }
+
+        /* ===== CARRERAS VIEW ===== */
+        .carreras-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .carrera-full-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+            margin-bottom: 10px; background: var(--bg-white);
+            transition: box-shadow 0.2s;
+        }
+        .carrera-full-item:hover { box-shadow: var(--shadow); }
+        .carrera-full-item .carrera-info h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+        .carrera-full-item .carrera-info span { font-size: 0.8rem; color: var(--text-gray); }
+
+        /* ===== SOPORTE VIEW ===== */
+        .chat-container {
+            display: flex; flex-direction: column; height: calc(100vh - 180px);
+            background: var(--bg-white); border-radius: var(--radius);
+            box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden;
+        }
+        .chat-header {
+            padding: 18px 24px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .chat-header h3 { font-size: 1rem; font-weight: 600; }
+        .chat-header .online-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+        .chat-messages {
+            flex: 1; overflow-y: auto; padding: 20px 24px;
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .chat-bubble {
+            max-width: 75%; padding: 12px 16px; border-radius: 16px;
+            font-size: 0.9rem; line-height: 1.5; position: relative;
+        }
+        .chat-bubble.institucion {
+            align-self: flex-end; background: var(--primary); color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-bubble.admin {
+            align-self: flex-start; background: var(--bg-light); color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+        }
+        .chat-bubble .chat-time {
+            font-size: 0.7rem; opacity: 0.7; margin-top: 4px; display: block;
+        }
+        .chat-input-area {
+            padding: 16px 24px; border-top: 1px solid var(--border);
+            display: flex; gap: 12px;
+        }
+        .chat-input-area input {
+            flex: 1; padding: 12px 16px; border: 2px solid var(--border);
+            border-radius: var(--radius-sm); font-size: 0.9rem; font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        .chat-input-area input:focus { outline: none; border-color: var(--primary); }
+        .chat-input-area button {
+            width: 48px; height: 48px; border-radius: var(--radius-sm);
+            background: var(--primary); color: white; border: none;
+            cursor: pointer; font-size: 1.1rem; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .chat-input-area button:hover { background: var(--primary-dark); }
+        .chat-empty {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; color: var(--text-light); gap: 12px;
+        }
+        .chat-empty i { font-size: 3rem; }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center; padding: 40px 20px; color: var(--text-gray);
+        }
+        .empty-state i { font-size: 2.5rem; color: var(--text-light); margin-bottom: 12px; }
+        .empty-state p { font-size: 0.9rem; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .carreras-layout { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .sidebar { width: 72px; }
+            .sidebar-header h1, .sidebar-header span, .sidebar-user-info, .menu-item span, .sidebar-footer .menu-item span { display: none; }
+            .sidebar-header .logo-icon { width: 36px; height: 36px; }
+            .sidebar-user { justify-content: center; padding: 12px; }
+            .menu-item { justify-content: center; padding: 14px; }
+            .menu-item i { font-size: 1.2rem; }
+            .main-content { margin-left: 72px; }
+            .content-area { padding: 20px; }
+            .top-bar { padding: 14px 20px; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN -->
+    <div id="login-view" class="login-container">
+        <div class="login-box">
+            <h2><i class="fas fa-school"></i> Mi Institución</h2>
+            <div id="login-error" class="login-error"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="usuario">Usuario o Email</label>
+                    <input type="text" id="usuario" required placeholder="Tu usuario o email institucional">
+                </div>
+                <div class="form-group">
+                    <label for="contraseña">Contraseña</label>
+                    <input type="password" id="contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            </form>
+            <div class="login-footer">
+                ¿Tenés una institución? <a href="/registro">Registrate aquí</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard-view" style="display:none;">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon"><img src="/static/multimedia/fotos/logo.png" alt="Logo"></div>
+                <div>
+                    <h1>Mi Institución</h1>
+                    <span>Panel de gestión</span>
+                </div>
+            </div>
+            <div class="sidebar-user">
+                <div class="sidebar-avatar" id="sidebar-avatar">IN</div>
+                <div class="sidebar-user-info">
+                    <div class="name" id="sidebar-name">Institución</div>
+                    <div class="role">Institución Educativa</div>
+                </div>
+            </div>
+            <nav class="menu">
+                <div class="menu-item active" data-view="dashboard">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="menu-item" data-view="institucion">
+                    <i class="fas fa-building"></i>
+                    <span>Mi Institución</span>
+                </div>
+                <div class="menu-item" data-view="carreras">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Carreras</span>
+                </div>
+                <div class="menu-item" data-view="soporte">
+                    <i class="fas fa-headset"></i>
+                    <span>Soporte</span>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="menu-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <div>
+                    <div class="page-title" id="view-title">Dashboard</div>
+                    <div class="page-subtitle" id="view-subtitle">Resumen de tu institución.</div>
+                </div>
+                <div class="user-info">
+                    <span id="topbar-user">Hola, Institución</span>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <!-- VIEW: DASHBOARD -->
+                <div class="view active" id="view-dashboard">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue"><i class="fas fa-book-open"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-carreras-publicadas">0</h3>
+                                <p>Carreras publicadas</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-carreras-activas">0</h3>
+                                <p>Carreras activas</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon yellow"><i class="fas fa-clock"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-cambios-pendientes">0</h3>
+                                <p>Cambios pendientes</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <i class="fas fa-building"></i>
+                                <h3>Mi Institución</h3>
+                            </div>
+                            <div class="dash-card-body" id="dash-inst-info">
+                                <div class="info-row">
+                                    <span class="label">Nombre</span>
+                                    <span class="value" id="dash-inst-nombre">—</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="label">Email</span>
+                                    <span class="value" id="dash-inst-email">—</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="label">Teléfono</span>
+                                    <span class="value" id="dash-inst-telefono">—</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="label">Dirección</span>
+                                    <span class="value" id="dash-inst-direccion">—</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <i class="fas fa-graduation-cap"></i>
+                                <h3>Carreras recientes</h3>
+                            </div>
+                            <div class="dash-card-body" id="dash-carreras">
+                                <div class="empty-state"><i class="fas fa-folder-open"></i><p>Sin carreras registradas</p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dash-card">
+                        <div class="dash-card-header">
+                            <i class="fas fa-comments"></i>
+                            <h3>Mensajes con el administrador</h3>
+                        </div>
+                        <div class="dash-card-body" id="dash-mensajes">
+                            <div class="empty-state"><i class="fas fa-envelope-open"></i><p>Sin mensajes</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: MI INSTITUCION -->
+                <div class="view" id="view-institucion">
+                    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 4px;">Mi Institución</h2>
+                    <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 24px;">Actualizá los datos de tu institución. Los cambios requieren aprobación del administrador.</p>
+                    <div class="inst-form" id="inst-form">
+                        <div class="form-row">
+                            <label>Nombre del establecimiento</label>
+                            <input type="text" id="inst-nombre" disabled>
+                        </div>
+                        <div class="form-row">
+                            <label>CUE</label>
+                            <input type="text" id="inst-cue" disabled>
+                        </div>
+                        <div class="form-row">
+                            <label>Email institucional</label>
+                            <div class="input-icon-wrap">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="inst-email" placeholder="contacto@institucion.edu.ar">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>Teléfono</label>
+                            <div class="input-icon-wrap">
+                                <i class="fas fa-phone"></i>
+                                <input type="text" id="inst-telefono" placeholder="Ej: 4667-3993">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>Dirección</label>
+                            <div class="input-icon-wrap">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <input type="text" id="inst-direccion" placeholder="Dirección física">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <button class="btn btn-primary" onclick="guardarCambios()" style="width: auto;">
+                                <i class="fas fa-save"></i> Solicitar cambios
+                            </button>
+                            <span id="inst-save-msg" class="save-msg"><i class="fas fa-check-circle"></i> Solicitud enviada</span>
+                        </div>
+                        <div id="inst-pendientes" style="display:none; margin-top: 20px;">
+                            <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 12px; color: var(--yellow);">
+                                <i class="fas fa-clock"></i> Cambios pendientes de aprobación
+                            </h3>
+                            <div id="inst-pendientes-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: CARRERAS -->
+                <div class="view" id="view-carreras">
+                    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 4px;">Carreras</h2>
+                    <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 24px;">Gestioná la oferta académica de tu institución.</p>
+                    <div class="carreras-layout">
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <i class="fas fa-plus-circle"></i>
+                                <h3>Agregar carrera</h3>
+                            </div>
+                            <div class="dash-card-body">
+                                <form id="form-crear-carrera">
+                                    <div class="form-group">
+                                        <label for="carrera-nombre">Nombre de la carrera *</label>
+                                        <input type="text" id="carrera-nombre" required placeholder="Ej: Técnico en Informática">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="carrera-nivel">Nivel *</label>
+                                        <select id="carrera-nivel" required></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="carrera-duracion">Duración (años)</label>
+                                        <input type="number" id="carrera-duracion" placeholder="Ej: 2" step="0.5" min="0.5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="carrera-turno">Turno</label>
+                                        <select id="carrera-turno"><option value="">Seleccionar...</option></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="carrera-perfil">Perfil del Egresado</label>
+                                        <textarea id="carrera-perfil" rows="3" placeholder="Describí qué conocimientos adquiere el egresado..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-success" style="width:100%;">
+                                        <i class="fas fa-check"></i> Crear Carrera
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <i class="fas fa-list"></i>
+                                <h3>Carreras registradas</h3>
+                            </div>
+                            <div class="dash-card-body" id="lista-carreras-completa">
+                                <div class="empty-state"><i class="fas fa-folder-open"></i><p>No hay carreras registradas</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: SOPORTE -->
+                <div class="view" id="view-soporte">
+                    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 4px;">Soporte</h2>
+                    <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 20px;">Comunicate con el administrador del distrito.</p>
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <span class="online-dot"></span>
+                            <h3>Administrador - Jefatura Distrital San Miguel</h3>
+                        </div>
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-empty">
+                                <i class="fas fa-comment-dots"></i>
+                                <p>No hay mensajes aún. Escribí tu consulta.</p>
+                            </div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chat-input" placeholder="Escribí tu mensaje..." maxlength="500">
+                            <button onclick="enviarMensaje()"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        let currentUser = null;
+        let instData = {};
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const stored = localStorage.getItem('user');
+            if (stored) {
+                currentUser = JSON.parse(stored);
+                initDashboard();
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+            const password = document.getElementById('contraseña').value;
+            try {
+                const res = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, password })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.user.rol !== 'institucion') {
+                        showLoginError('Esta área es solo para instituciones.');
+                        return;
+                    }
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    currentUser = data.user;
+                    initDashboard();
+                } else {
+                    showLoginError('Usuario o contraseña incorrectos');
+                }
+            } catch (err) {
+                showLoginError('Error de conexión');
+            }
+        });
+
+        function showLoginError(msg) {
+            const el = document.getElementById('login-error');
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+
+        async function initDashboard() {
+            document.getElementById('login-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'flex';
+
+            const name = currentUser.usuario || 'Institución';
+            const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+            document.getElementById('sidebar-avatar').textContent = initials;
+            document.getElementById('sidebar-name').textContent = name;
+            document.getElementById('topbar-user').textContent = `Hola, ${name}`;
+            document.getElementById('inst-cue').value = currentUser.institucion_cue || '';
+
+            initSidebar();
+            await loadInstitucion();
+            await loadDashboardData();
+            await loadCarrerasCompleta();
+            await loadNiveles();
+            await loadTurnos();
+            await loadMensajes();
+        }
+
+        function initSidebar() {
+            document.querySelectorAll('.menu-item[data-view]').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.menu-item[data-view]').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    const view = item.dataset.view;
+                    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                    document.getElementById(`view-${view}`).classList.add('active');
+
+                    const titles = {
+                        dashboard: ['Dashboard', 'Resumen de tu institución.'],
+                        institucion: ['Mi Institución', 'Actualizá los datos de tu institución.'],
+                        carreras: ['Carreras', 'Gestioná la oferta académica de tu institución.'],
+                        soporte: ['Soporte', 'Comunicate con el administrador del distrito.']
+                    };
+                    document.getElementById('view-title').textContent = titles[view][0];
+                    document.getElementById('view-subtitle').textContent = titles[view][1];
+
+                    if (view === 'soporte') {
+                        setTimeout(() => loadMensajes(), 100);
+                    }
+                    if (view === 'carreras') {
+                        loadCarrerasCompleta();
+                    }
+                    if (view === 'institucion') {
+                        loadCambiosPendientes();
+                    }
+                });
+            });
+        }
+
+        // === INSTITUCION ===
+        async function loadInstitucion() {
+            try {
+                const res = await fetch(`${API_URL}/instituciones/${currentUser.institucion_cue}`);
+                instData = await res.json();
+
+                document.getElementById('inst-nombre').value = instData.nombre || '';
+                document.getElementById('inst-email').value = instData.email || '';
+                document.getElementById('inst-telefono').value = instData.telefono || '';
+                document.getElementById('inst-direccion').value = instData.direccion || '';
+
+                document.getElementById('dash-inst-nombre').textContent = instData.nombre || '—';
+                document.getElementById('dash-inst-email').textContent = instData.email || '—';
+                document.getElementById('dash-inst-telefono').textContent = instData.telefono || '—';
+                document.getElementById('dash-inst-direccion').textContent = instData.direccion || '—';
+            } catch (e) {}
+        }
+
+        async function guardarCambios() {
+            const campos = [
+                { campo: 'email', label: 'Email', actual: instData.email, nuevo: document.getElementById('inst-email').value },
+                { campo: 'telefono', label: 'Teléfono', actual: instData.telefono, nuevo: document.getElementById('inst-telefono').value },
+                { campo: 'direccion', label: 'Dirección', actual: instData.direccion, nuevo: document.getElementById('inst-direccion').value }
+            ];
+
+            let count = 0;
+            for (const c of campos) {
+                if (c.nuevo.trim() && c.nuevo.trim() !== (c.actual || '')) {
+                    try {
+                        await fetch(`${API_URL}/solicitudes-cambio`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                institucion_cue: currentUser.institucion_cue,
+                                campo: c.campo,
+                                valor_actual: c.actual || '',
+                                valor_nuevo: c.nuevo.trim()
+                            })
+                        });
+                        count++;
+                    } catch (e) {}
+                }
+            }
+
+            const msg = document.getElementById('inst-save-msg');
+            if (count > 0) {
+                msg.innerHTML = `<i class="fas fa-check-circle"></i> ${count} solicitud(es) de cambio enviada(s)`;
+                msg.style.display = 'inline';
+                setTimeout(() => msg.style.display = 'none', 4000);
+                loadCambiosPendientes();
+            } else {
+                msg.innerHTML = `<i class="fas fa-info-circle"></i> No hay cambios para solicitar`;
+                msg.style.display = 'inline';
+                setTimeout(() => msg.style.display = 'none', 3000);
+            }
+        }
+
+        async function loadCambiosPendientes() {
+            try {
+                const res = await fetch(`${API_URL}/solicitudes-cambio?institucion_cue=${currentUser.institucion_cue}`);
+                const solicitudes = await res.json();
+                const pendientes = solicitudes.filter(s => s.estado === 'pendiente');
+                const container = document.getElementById('inst-pendientes');
+                const list = document.getElementById('inst-pendientes-list');
+
+                if (pendientes.length === 0) {
+                    container.style.display = 'none';
+                    return;
+                }
+                container.style.display = 'block';
+                list.innerHTML = pendientes.map(s => `
+                    <div class="info-row">
+                        <span class="label">${s.campo}</span>
+                        <span class="status-badge pending"><i class="fas fa-clock"></i> Pendiente</span>
+                    </div>
+                `).join('');
+            } catch (e) {}
+        }
+
+        // === CARRERAS ===
+        async function loadNiveles() {
+            try {
+                const res = await fetch(`${API_URL}/niveles`);
+                const niveles = await res.json();
+                document.getElementById('carrera-nivel').innerHTML =
+                    '<option value="">Seleccionar nivel...</option>' +
+                    niveles.map(n => `<option value="${n.id}">${n.nombre}</option>`).join('');
+            } catch (e) {}
+        }
+
+        async function loadTurnos() {
+            try {
+                const res = await fetch(`${API_URL}/turnos`);
+                const turnos = await res.json();
+                document.getElementById('carrera-turno').innerHTML =
+                    '<option value="">Sin turno</option>' +
+                    turnos.map(t => `<option value="${t.id}">${t.nombre}</option>`).join('');
+            } catch (e) {}
+        }
+
+        async function loadCarrerasCompleta() {
+            try {
+                const res = await fetch(`${API_URL}/instituciones/${currentUser.institucion_cue}/carreras`);
+                const carreras = await res.json();
+                const container = document.getElementById('lista-carreras-completa');
+
+                if (carreras.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><i class="fas fa-folder-open"></i><p>No hay carreras registradas</p></div>';
+                    return;
+                }
+
+                container.innerHTML = carreras.map(c => `
+                    <div class="carrera-full-item">
+                        <div class="carrera-info">
+                            <h4>${c.nombre}</h4>
+                            <span>${c.nivel_nombre || ''} | ${c.duracion_meses ? formatDuracion(c.duracion_meses) : ''} | ${c.turno || 'Sin turno'}</span>
+                            ${c.descripcion ? `<br><small style="color: var(--text-gray);">${c.descripcion.substring(0, 60)}${c.descripcion.length > 60 ? '...' : ''}</small>` : ''}
+                        </div>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarCarrera(${c.relacion_id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+            } catch (e) {}
+        }
+
+        document.getElementById('form-crear-carrera').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById('carrera-nombre').value.trim();
+            const nivel_id = parseInt(document.getElementById('carrera-nivel').value);
+            const duracionAnios = parseFloat(document.getElementById('carrera-duracion').value) || null;
+            const duracionMeses = duracionAnios ? Math.round(duracionAnios * 12) : null;
+            const turno_id = parseInt(document.getElementById('carrera-turno').value) || null;
+            const perfil = document.getElementById('carrera-perfil').value.trim();
+
+            if (!nombre || !nivel_id) {
+                alert('Completá el nombre y el nivel de la carrera');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/instituciones/${currentUser.institucion_cue}/carreras`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nombre, nivel_id, duracion_meses: duracionMeses,
+                        turno_id, descripcion: perfil
+                    })
+                });
+
+                if (res.ok) {
+                    alert('Carrera creada correctamente');
+                    document.getElementById('form-crear-carrera').reset();
+                    await Promise.all([loadCarrerasCompleta(), loadDashboardData()]);
+                } else {
+                    const err = await res.json();
+                    alert(err.detail || 'Error al crear la carrera');
+                }
+            } catch (e) {
+                alert('Error de conexión');
+            }
+        });
+
+        async function eliminarCarrera(relacionId) {
+            if (confirm('¿Eliminar esta carrera de tu institución?')) {
+                await fetch(`${API_URL}/institucion-oferta/${relacionId}`, { method: 'DELETE' });
+                await Promise.all([loadCarrerasCompleta(), loadDashboardData()]);
+            }
+        }
+
+        // === DASHBOARD DATA ===
+        async function loadDashboardData() {
+            try {
+                const [carrerasRes, solicitudesRes] = await Promise.all([
+                    fetch(`${API_URL}/instituciones/${currentUser.institucion_cue}/carreras`),
+                    fetch(`${API_URL}/solicitudes-cambio?institucion_cue=${currentUser.institucion_cue}`)
+                ]);
+
+                const carreras = await carrerasRes.json();
+                const solicitudes = await solicitudesRes.json();
+                const pendientes = solicitudes.filter(s => s.estado === 'pendiente');
+
+                document.getElementById('stat-carreras-publicadas').textContent = carreras.length;
+                document.getElementById('stat-carreras-activas').textContent = carreras.length;
+                document.getElementById('stat-cambios-pendientes').textContent = pendientes.length;
+
+                // Carreras recientes (max 3)
+                const recentContainer = document.getElementById('dash-carreras');
+                const sorted = carreras.sort((a, b) => (b.id || 0) - (a.id || 0));
+                const top3 = sorted.slice(0, 3);
+
+                if (top3.length === 0) {
+                    recentContainer.innerHTML = '<div class="empty-state"><i class="fas fa-folder-open"></i><p>Sin carreras registradas</p></div>';
+                } else {
+                    recentContainer.innerHTML = top3.map(c => `
+                        <div class="carrera-mini-item">
+                            <div>
+                                <div class="carrera-name">${c.nombre}</div>
+                                <div style="font-size:0.8rem;color:var(--text-gray);">${c.nivel_nombre || ''}</div>
+                            </div>
+                            <div class="carrera-meta">
+                                <span class="status-badge active"><i class="fas fa-check"></i> Activa</span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {}
+        }
+
+        // === MENSAJES / CHAT ===
+        async function loadMensajes() {
+            try {
+                const res = await fetch(`${API_URL}/mensajes?institucion_cue=${currentUser.institucion_cue}`);
+                const mensajes = await res.json();
+                renderChat(mensajes);
+
+                // Dashboard mensajes (max 3)
+                const dashContainer = document.getElementById('dash-mensajes');
+                if (mensajes.length === 0) {
+                    dashContainer.innerHTML = '<div class="empty-state"><i class="fas fa-envelope-open"></i><p>Sin mensajes</p></div>';
+                } else {
+                    const last3 = mensajes.slice(-3).reverse();
+                    dashContainer.innerHTML = last3.map(m => `
+                        <div class="msg-mini-item">
+                            <div>
+                                <div class="msg-title">${m.remitente === 'admin' ? 'Administrador' : 'Tu institución'}</div>
+                                <div class="msg-preview">${m.contenido || ''}</div>
+                            </div>
+                            <div class="msg-meta">
+                                <span class="msg-date">${formatDate(m.created_at)}</span>
+                                <span class="status-badge ${m.leido ? 'active' : 'review'}">
+                                    <i class="fas fa-${m.leido ? 'check' : 'clock'}"></i> ${m.leido ? 'Respondido' : 'En revisión'}
+                                </span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {}
+        }
+
+        function renderChat(mensajes) {
+            const container = document.getElementById('chat-messages');
+            if (!mensajes || mensajes.length === 0) {
+                container.innerHTML = `<div class="chat-empty"><i class="fas fa-comment-dots"></i><p>No hay mensajes aún. Escribí tu consulta.</p></div>`;
+                return;
+            }
+            container.innerHTML = mensajes.map(m => {
+                const isAdmin = m.remitente === 'admin';
+                const name = isAdmin ? 'Administrador' : 'Tu institución';
+                return `
+                    <div class="chat-bubble ${isAdmin ? 'admin' : 'institucion'}">
+                        <small style="font-weight:600;opacity:0.8;">${name}</small>
+                        <div>${escapeHtml(m.contenido)}</div>
+                        <span class="chat-time">${formatDate(m.created_at)}</span>
+                    </div>
+                `;
+            }).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function enviarMensaje() {
+            const input = document.getElementById('chat-input');
+            const contenido = input.value.trim();
+            if (!contenido) return;
+
+            input.value = '';
+            try {
+                const res = await fetch(`${API_URL}/mensajes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        institucion_cue: currentUser.institucion_cue,
+                        contenido,
+                        remitente: 'institucion'
+                    })
+                });
+                if (res.ok) {
+                    await loadMensajes();
+                }
+            } catch (e) {}
+        }
+
+        document.getElementById('chat-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') enviarMensaje();
+        });
+
+        // === UTILS ===
+        function formatDuracion(meses) {
+            if (!meses) return '';
+            const años = Math.floor(meses / 12);
+            const resto = meses % 12;
+            let r = '';
+            if (años > 0) r += años + (años === 1 ? ' año' : ' años');
+            if (resto > 0) r += (r ? ' ' : '') + resto + (resto === 1 ? ' mes' : ' meses');
+            return r;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>

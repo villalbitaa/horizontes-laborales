@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jefatura Distrital San Miguel</title>
+    <link rel="icon" type="image/png" href="/static/multimedia/fotos/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/static/estilo/style.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="/static/multimedia/fotos/logo.png" alt="Logo">
+                </div>
+                <div>
+                    <h1>Jefatura Distrital<br>San Miguel</h1>
+                    <h2>Provincia de Buenos Aires</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu">
+            <div class="menu-item active">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </div>
+            <div class="menu-item" id="menu-horizontes">
+                <i class="fas fa-chart-line"></i>
+                <span>Horizontes</span>
+            </div>
+            <div class="menu-item" id="menu-institucion">
+                <i class="fas fa-school"></i>
+                <span>Institución</span>
+            </div>
+        </div>
+        
+        <div class="footer-info">
+            <p>© 2026 Jefatura Distrital San Miguel</p>
+            <p>Dirección General de Cultura y Educación</p>
+        </div>
+    </aside>
+    
+    <main class="main-content">
+        <div class="top-bar">
+            <div class="page-title">Portal de Aplicaciones</div>
+            <div class="user-info">
+                <span>Distrito: San Miguel</span>
+                <div class="user-avatar">JD</div>
+            </div>
+        </div>
+        
+        <div class="content-container">
+            <div class="banner">
+                <div class="banner-icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div class="banner-text">
+                    <h1>Portal de Aplicaciones</h1>
+                    <p>Jefatura Distrital San Miguel - Gestión educativa del distrito</p>
+                </div>
+            </div>
+            
+            <div class="section-title">
+                <h2><i class="fas fa-rocket"></i> Aplicaciones disponibles</h2>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="card featured">
+                    <div class="card-featured-badge">
+                        <i class="fas fa-star"></i> Destacado
+                    </div>
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="card-title">Horizontes</h3>
+                    <p class="card-description">Sistema consulta de la oferta académica secundaria, superior y formación profesional del distrito de San Miguel</p>
+                    <a href="/horizontes" class="btn-primary">
+                        Acceder a la aplicación
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3 class="card-title">Mapa Socio Productivo</h3>
+                    <p class="card-description">Plataforma de mapeo y análisis de recursos, actores y oportunidades socio-productivas del distrito de San Miguel.</p>
+                    <span class="btn-disabled">
+                        Próximamente
+                        <i class="fas fa-clock"></i>
+                    </span>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #27ae60, #1e8449);">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="card-title">Escuelas Seguras</h3>
+                    <p class="card-description">Relevamientos, seguimiento y documentación del plan de prevención de riesgos en instituciones educativas.</p>
+                    <span class="btn-disabled">
+                        Próximamente
+                        <i class="fas fa-clock"></i>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="info-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>¿Representás una institución?</h3>
+                    <p>Registrá tu institución para gestionar la oferta académica.</p>
+                    <a href="#" class="info-link">Registrar institución <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-headset"></i>
+                    <h3>¿Necesitás ayuda?</h3>
+                    <p>Contactá a la Jefatura Distrital para soporte técnico.</p>
+                    <a href="#" class="info-link">Contactar <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="app-footer">
+                <p><i class="fas fa-info-circle"></i> ISFT 182 - Prácticas Profesionalizantes</p>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('menu-horizontes')?.addEventListener('click', () => {
+                window.location.href = '/horizontes';
+            });
+            document.getElementById('menu-institucion')?.addEventListener('click', () => {
+                window.location.href = '/institucion';
+            });
+        });
+    </script>
+</body>
+</html>

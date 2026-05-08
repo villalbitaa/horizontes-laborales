@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Horizontes San Miguel</title>
+    <link rel="icon" type="image/png" href="/static/multimedia/fotos/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/estilo/style.css">
+    <style>
+        html, body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: flex-start !important;
+            background: linear-gradient(135deg, #2c3e50, #3498db) !important;
+            min-height: 100vh;
+            padding-top: 60px;
+        }
+        .registro-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            padding: 20px;
+        }
+        .registro-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 500px;
+        }
+        .registro-box h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .registro-box .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+        .login-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="registro-container">
+        <div class="registro-box">
+            <h2><i class="fas fa-school"></i> Registro de Institución</h2>
+            <p class="subtitle">Solicita acceso para gestionar los datos de tu institución</p>
+            
+            <div id="alert-success" class="alert alert-success">
+                <i class="fas fa-check-circle"></i> <span id="success-message"></span>
+            </div>
+            
+            <div id="alert-error" class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i> <span id="error-message"></span>
+            </div>
+            
+            <form id="registro-form">
+                <div class="form-group">
+                    <label for="cue">CUE (Clave Única de Establecimiento) *</label>
+                    <input type="text" id="cue" required placeholder="Ej: 06-089-XXX">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nombre">Nombre de la institución *</label>
+                    <input type="text" id="nombre" required placeholder="Nombre de la institución">
+                </div>
+                
+                <div class="form-group">
+                    <label for="barrio">Barrio *</label>
+                    <input type="text" id="barrio" required placeholder="Ej: Villa Adelina">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email institucional *</label>
+                    <input type="email" id="email" required placeholder="contacto@institucion.edu.ar">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contraseña">Contraseña *</label>
+                    <input type="password" id="contraseña" required placeholder="Mínimo 6 caracteres">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmar">Confirmar contraseña *</label>
+                    <input type="password" id="confirmar" required placeholder="Repite tu contraseña">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Enviar Solicitud
+                </button>
+            </form>
+            
+            <div class="login-link">
+                <a href="/institucion">¿Ya tienes acceso? Iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        
+        document.getElementById('registro-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const cue = document.getElementById('cue').value.trim();
+            const nombre = document.getElementById('nombre').value.trim();
+            const barrio = document.getElementById('barrio').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('contraseña').value;
+            const confirmar = document.getElementById('confirmar').value;
+            
+            document.getElementById('alert-success').style.display = 'none';
+            document.getElementById('alert-error').style.display = 'none';
+            
+            if (password.length < 6) {
+                showError('La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+            
+            if (password !== confirmar) {
+                showError('Las contraseñas no coinciden');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/registro`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cue: cue,
+                    email: email,
+                    password: password,
+                    nombre_establecimiento: nombre,
+                    barrio: barrio
+                })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showSuccess(data.message + ' Te informaremos cuando sea aprobada.');
+                    document.getElementById('registro-form').reset();
+                } else {
+                    showError(data.detail || 'Error al enviar la solicitud');
+                }
+            } catch (error) {
+                showError('Error de conexión. Asegúrate de que el servidor está corriendo.');
+            }
+        });
+        
+        function showError(message) {
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('alert-error').style.display = 'block';
+        }
+        
+        function showSuccess(message) {
+            document.getElementById('success-message').textContent = message;
+            document.getElementById('alert-success').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
