@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Institución - Horizontes San Miguel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/estilo/style.css">
+    <style>
+        html, body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            background: linear-gradient(135deg, #2c3e50, #3498db) !important;
+            min-height: 100vh;
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+        }
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-box h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #219a52;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        .institucion-container {
+            display: none;
+            width: 100%;
+        }
+        .institucion-header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .institucion-content {
+            padding: 30px;
+        }
+        .data-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .data-card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        .carrera-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #3498db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .carrera-info h4 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .carrera-info span {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-header h3 {
+            color: #2c3e50;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-view" class="login-container">
+        <div class="login-box">
+            <h2><i class="fas fa-school"></i> Mi Institución</h2>
+            <div id="login-error" class="alert alert-error" style="display: none;"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="usuario">Usuario o Email</label>
+                    <input type="text" id="usuario" required placeholder="Tu usuario o email institucional">
+                </div>
+                <div class="form-group">
+                    <label for="contraseña">Contraseña</label>
+                    <input type="password" id="contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            </form>
+            <p style="text-align: center; margin-top: 20px; color: #666;">
+                ¿Tenés una institución? <a href="/registro" style="color: #3498db; text-decoration: none; font-weight: 500;">Registrate aquí</a>
+            </p>
+        </div>
+    </div>
+
+    <div id="institucion-view" class="institucion-container">
+        <div class="institucion-header">
+            <h1><i class="fas fa-school"></i> <span id="institucion-nombre">Mi Institución</span></h1>
+            <div>
+                <span id="institucion-user"></span>
+                <button class="btn btn-warning" onclick="logout()" style="margin-left: 10px;">Cerrar Sesión</button>
+            </div>
+        </div>
+
+        <div class="institucion-content">
+            <div class="data-card">
+                <h3><i class="fas fa-building"></i> Datos de la Institución</h3>
+                <div id="perfil-institucion">
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="text" id="inst-telefono" placeholder="Ej: 4667-3993">
+                    </div>
+                    <div class="form-group">
+                        <label>Sitio web</label>
+                        <input type="text" id="inst-web" placeholder="https://ejemplo.edu.ar">
+                    </div>
+                    <div class="form-group">
+                        <label>Email institucional</label>
+                        <input type="email" id="inst-email" placeholder="contacto@institucion.edu.ar">
+                    </div>
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <input type="text" id="inst-direccion" placeholder="Dirección física">
+                    </div>
+                    <button class="btn btn-primary" onclick="guardarPerfil()" style="width: auto;">
+                        <i class="fas fa-save"></i> Guardar datos
+                    </button>
+                    <span id="perfil-msg" style="margin-left: 10px; color: #27ae60; display: none;">Guardado</span>
+                </div>
+            </div>
+
+            <div class="data-card">
+                <h3><i class="fas fa-graduation-cap"></i> Mis Carreras</h3>
+                <div id="lista-carreras"></div>
+            </div>
+
+            <div class="data-card">
+                <h3><i class="fas fa-plus-circle"></i> Dar de Alta una Carrera</h3>
+                <p style="color: #666; margin-bottom: 15px;">Completá los datos de la nueva carrera para tu institución.</p>
+                <form id="form-crear-carrera">
+                    <div class="form-group">
+                        <label for="carrera-nombre">Nombre de la carrera *</label>
+                        <input type="text" id="carrera-nombre" required placeholder="Ej: Técnico en Informática">
+                    </div>
+                    <div class="form-group">
+                        <label for="carrera-nivel">Nivel *</label>
+                        <select id="carrera-nivel" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="carrera-duracion">Duración (meses)</label>
+                        <input type="number" id="carrera-duracion" placeholder="Ej: 24">
+                    </div>
+                    <div class="form-group">
+                        <label for="carrera-turno">Turno</label>
+                        <select id="carrera-turno">
+                            <option value="">Seleccionar...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="carrera-perfil">Perfil del Egresado</label>
+                        <textarea id="carrera-perfil" rows="4" placeholder="Describí qué conocimientos adquiere el egresado y su perfil profesional..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check"></i> Crear Carrera
+                    </button>
+                </form>
+            </div>
+
+            <div class="data-card">
+                <h3><i class="fas fa-history"></i> Historial de Carreras Creadas</h3>
+                <div id="lista-mis-solicitudes"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        let currentUser = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('institucion-view').style.display = 'none';
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+            const password = document.getElementById('contraseña').value;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.user.rol !== 'institucion') {
+                        showLoginError('Esta área es solo para instituciones.');
+                        return;
+                    }
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    showInstitucion();
+                } else {
+                    showLoginError('Usuario o contraseña incorrectos');
+                }
+            } catch (error) {
+                showLoginError('Error de conexión');
+            }
+        });
+
+        function showLoginError(msg) {
+            document.getElementById('login-error').textContent = msg;
+            document.getElementById('login-error').style.display = 'block';
+        }
+
+        async function showInstitucion() {
+            currentUser = JSON.parse(localStorage.getItem('user'));
+
+            document.getElementById('login-view').style.display = 'none';
+            document.getElementById('institucion-view').style.display = 'block';
+
+            document.getElementById('institucion-user').textContent = `Hola, ${currentUser.usuario}`;
+
+            try {
+                const res = await fetch(`${API_URL}/instituciones/${currentUser.institucion_cue}`);
+                const inst = await res.json();
+                document.getElementById('institucion-nombre').textContent = inst.nombre || 'Mi Institución';
+                document.getElementById('inst-telefono').value = inst.telefono || '';
+                document.getElementById('inst-web').value = inst.sitio_web || '';
+                document.getElementById('inst-email').value = inst.email || '';
+                document.getElementById('inst-direccion').value = inst.direccion || '';
+            } catch (e) {}
+
+            await loadData();
+        }
+
+        async function loadData() {
+            await Promise.all([
+                loadCarreras(),
+                loadMisSolicitudes(),
+                loadNiveles(),
+                loadTurnos()
+            ]);
+        }
+
+        async function loadNiveles() {
+            const res = await fetch(`${API_URL}/niveles`);
+            const niveles = await res.json();
+            document.getElementById('carrera-nivel').innerHTML =
+                '<option value="">Seleccionar nivel...</option>' +
+                niveles.map(n => `<option value="${n.id}">${n.nombre}</option>`).join('');
+        }
+
+        async function loadTurnos() {
+            const res = await fetch(`${API_URL}/turnos`);
+            const turnos = await res.json();
+            document.getElementById('carrera-turno').innerHTML =
+                '<option value="">Sin turno</option>' +
+                turnos.map(t => `<option value="${t.id}">${t.nombre}</option>`).join('');
+        }
+
+        async function guardarPerfil() {
+            const data = {
+                telefono: document.getElementById('inst-telefono').value,
+                sitio_web: document.getElementById('inst-web').value,
+                email: document.getElementById('inst-email').value,
+                direccion: document.getElementById('inst-direccion').value
+            };
+            try {
+                const res = await fetch(`${API_URL}/instituciones/${currentUser.institucion_cue}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const msg = document.getElementById('perfil-msg');
+                msg.style.display = 'inline';
+                msg.textContent = res.ok ? 'Guardado' : 'Error';
+                setTimeout(() => msg.style.display = 'none', 2000);
+            } catch (e) {
+                alert('Error de conexión');
+            }
+        }
+
+        async function loadCarreras() {
+            const response = await fetch(`${API_URL}/instituciones/${currentUser.institucion_cue}/carreras`);
+            const carreras = await response.json();
+
+            if (carreras.length === 0) {
+                document.getElementById('lista-carreras').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-graduation-cap"></i>
+                        <p>No tenés carreras agregadas</p>
+                    </div>
+                `;
+                return;
+            }
+
+            document.getElementById('lista-carreras').innerHTML = carreras.map(c => `
+                <div class="carrera-item" style="flex-direction: column; align-items: stretch;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div class="carrera-info">
+                            <h4>${c.nombre}</h4>
+                            <span>${c.nivel_nombre || ''} | ${c.duracion_meses ? c.duracion_meses + ' meses' : ''} | ${c.turno || ''}</span>
+                        </div>
+                        <button class="btn btn-danger" onclick="eliminarCarrera(${c.relacion_id})" style="padding: 6px 12px; font-size: 0.85rem;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    ${c.descripcion ? `
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;">
+                            <small style="color: #2c3e50; font-weight: 600;"><i class="fas fa-user-graduate"></i> Perfil del Egresado:</small>
+                            <p style="color: #666; font-size: 0.9rem; margin-top: 5px;">${c.descripcion}</p>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        async function loadMisSolicitudes() {
+            const response = await fetch(`${API_URL}/mis-solicitudes?institucion_cue=${currentUser.institucion_cue}`);
+            const solicitudes = await response.json();
+
+            document.getElementById('lista-mis-solicitudes').innerHTML = solicitudes.length === 0
+                ? '<div class="empty-state"><i class="fas fa-paper-plane"></i><p>No hay carreras creadas</p></div>'
+                : solicitudes.map(s => {
+                    const fecha = s.created_at ? new Date(s.created_at).toLocaleDateString() : '-';
+                    return `
+                        <div class="carrera-item">
+                            <div class="carrera-info">
+                                <h4><i class="fas fa-check-circle" style="color: #27ae60;"></i> ${s.carrera_nombre}</h4>
+                                <span>${s.nivel_nombre || ''} | ${s.turno || 'Sin turno'}</span>
+                                <br><span class="badge badge-success">Activa</span>
+                                <br><small style="color: #999;">Creada: ${fecha}</small>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.reload();
+        }
+
+        document.getElementById('form-crear-carrera').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nombre = document.getElementById('carrera-nombre').value.trim();
+            const nivel_id = parseInt(document.getElementById('carrera-nivel').value);
+            const duracion = parseInt(document.getElementById('carrera-duracion').value) || null;
+            const turno_id = parseInt(document.getElementById('carrera-turno').value) || null;
+            const perfil = document.getElementById('carrera-perfil').value.trim();
+
+            if (!nombre || !nivel_id) {
+                alert('Completá el nombre y el nivel de la carrera');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/instituciones/${currentUser.institucion_cue}/carreras`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nombre: nombre,
+                        nivel_id: nivel_id,
+                        duracion_meses: duracion,
+                        turno_id: turno_id,
+                        descripcion: perfil
+                    })
+                });
+
+                if (response.ok) {
+                    alert('Carrera creada correctamente');
+                    document.getElementById('form-crear-carrera').reset();
+                    await Promise.all([
+                        loadCarreras(),
+                        loadMisSolicitudes()
+                    ]);
+                } else {
+                    const error = await response.json();
+                    alert(error.detail || 'Error al crear la carrera');
+                }
+            } catch (error) {
+                alert('Error de conexión');
+            }
+        });
+
+        async function eliminarCarrera(relacionId) {
+            if (confirm('¿Eliminar esta carrera de tu institución?')) {
+                await fetch(`${API_URL}/institucion-oferta/${relacionId}`, { method: 'DELETE' });
+                await loadCarreras();
+            }
+        }
+    </script>
+</body>
+</html>
